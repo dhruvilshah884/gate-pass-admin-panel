@@ -8,7 +8,7 @@ import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 const service = new SecurityService()
 export default nextConnect()
   .use(dbConnectMiddleware)
-  .use(authCheckMiddleware)
+  // .use(authCheckMiddleware)
   .post(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = {

@@ -8,7 +8,7 @@ const service = new SecurityService()
 
 export default nextConnect()
   .use(dbConnectMiddleware)
-  .use(authCheckMiddleware)
+  // .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const security = await service.get(req.query.id as string)

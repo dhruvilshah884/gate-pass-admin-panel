@@ -8,7 +8,7 @@ const service = new ResidancyService()
 
 export default nextConnect()
   .use(dbConnectMiddleware)
-  .use(authCheckMiddleware)
+  // .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const residance = await service.get(req.query.id as string)
