@@ -2,7 +2,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, Shield, UserCheck, ArrowUp, ArrowDown } from 'lucide-react'
 import { motion } from 'framer-motion'
-import '../../styles/globals.css'
 import DashboardLayout from '@/layout/DashboardLayout'
 
 const stats = [

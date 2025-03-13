@@ -3,7 +3,6 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { School, LogOut, Home, Shield, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import '../../styles/globals.css'
 
 interface DashboardLayoutProps {
   children: ReactNode
