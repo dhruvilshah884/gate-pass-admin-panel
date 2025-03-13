@@ -35,18 +35,18 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-admin ==>✅
-attendance ==> ✅
-complaint ==> ✅
-flat ==>✅
-maintenance ==>✅
-payroll ==> ✅
-residace ==>✅
-security ==>✅
-sos ==>✅
-visitor ==>✅
-wifi ==>✅
-qrCode ==> ✅
+admin ==>✅ testing ==> ❌
+attendance ==> ✅ testing ==> ❌
+complaint ==> ✅ testing ==> ❌
+flat ==>✅ testing ==> ❌
+maintenance ==>✅ testing ==> ❌
+payroll ==> ✅ testing ==> ❌
+residace ==>✅ testing ==> ❌
+security ==>✅ testing ==> ❌
+sos ==>✅  testing ==> ❌
+visitor ==>✅ testing ==> ❌
+wifi ==>✅ testing ==> ❌
+qrCode ==> ✅ testing ==> ❌
 
 
 
