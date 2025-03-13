@@ -4,6 +4,6 @@ import { IResidance } from '@/interface/residance'
 
 export class ResidancyService extends CurdOperation<IResidance> {
   constructor() {
-    super(models.Residance)
+    super(models.Residance ,[{path:"flat"}])
   }
 }

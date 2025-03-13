@@ -4,6 +4,6 @@ import { ISecurity } from '@/interface/security'
 
 export class SecurityService extends CurdOperation<ISecurity> {
   constructor() {
-    super(models.Security)
+    super(models.Security ,[{path:"flat"}])
   }
 }

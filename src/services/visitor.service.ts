@@ -4,6 +4,6 @@ import { IVisitor } from '@/interface/visitor'
 
 export class VisitorService extends CurdOperation<IVisitor> {
   constructor() {
-    super(models.Visitor)
+    super(models.Visitor ,[{path:"flat"},{path:"residance"} ,{path:"security"}])
   }
 }
