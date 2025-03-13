@@ -1,11 +1,5 @@
-import React from 'react'
+import LoginForm from './login'
 
-const index = () => {
-  return (
-    <div>
-      <h1>Hello Welcome To The Gate-Pass Api For More Information Go to Documentation</h1>
-    </div>
-  )
+export default function Home() {
+  return <LoginForm />
 }
-
-export default index

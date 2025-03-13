@@ -1,0 +1,64 @@
+'use client'
+import { ReactNode } from 'react'
+import Link from 'next/link'
+import { School, LogOut, Home, Shield, UserCheck } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import '../../styles/globals.css'
+
+interface DashboardLayoutProps {
+  children: ReactNode
+}
+
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  return (
+    <div className='flex flex-col h-screen bg-gray-100'>
+      <div className='hidden md:flex flex-1 overflow-hidden'>
+        <aside className='w-64 bg-white text-black overflow-y-auto p-6 shadow-lg border-r border-gray-300'>
+          <div className='flex flex-col items-center mb-8'>
+            <h1 className='text-2xl font-bold text-center text-gray-800'>Gate Pass Admin</h1>
+          </div>
+          <nav className='space-y-3'>
+            <Link
+              href='/dashboard'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+            >
+              <Home className='h-5 w-5' />
+              <span className='font-semibold'>Dashboard</span>
+            </Link>
+            <Link
+              href='/residency'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+            >
+              <School className='h-5 w-5' />
+              <span className='font-semibold'>Residency</span>
+            </Link>
+            <Link
+              href='/security '
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+            >
+              <Shield className='h-5 w-5' />
+              <span className='font-semibold'>Security</span>
+            </Link>
+            <Link
+              href='/visitors'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+            >
+              <UserCheck className='h-5 w-5' />
+              <span className='font-semibold'>Visitors</span>
+            </Link>
+            <Button
+              variant='ghost'
+              className='flex items-center justify-start text-red-500 w-full mt-6 hover:bg-red-100 transition-colors px-3 py-2 rounded-lg'
+            >
+              <LogOut className='h-5 w-5 mr-2' />
+              Logout
+            </Button>
+          </nav>
+        </aside>
+        <main className='flex-1 overflow-y-auto  bg-white shadow-md'>
+          <div className='w-full p-6 mx-auto'>{children}</div>
+        </main>
+      </div>
+    </div>
+  )
+}
