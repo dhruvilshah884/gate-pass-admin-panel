@@ -59,7 +59,8 @@ export class AuthService {
         proof: findUser.proof,
         salary: findUser.salary,
         shiftEndTime: findUser.shiftEndTime,
-        shiftTime: findUser.shiftTime
+        shiftTime: findUser.shiftTime,
+        token:tokenData
       }
     } catch (err: any) {
       throw { success: false, message: err.message, code: err.code || 500 }

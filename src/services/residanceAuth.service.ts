@@ -61,7 +61,8 @@ export class AuthService {
         maintanance: findUser.maintanance,
         password: '',
         phoneNumber1: findUser.phoneNumber1,
-        state: findUser.state
+        state: findUser.state,
+        token: tokenData
       }
     } catch (err: any) {
       throw { success: false, message: err.message, code: err.code || 500 }
