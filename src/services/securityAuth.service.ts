@@ -9,6 +9,7 @@ export class AuthService {
   public user = new SecurityService()
 
   public async Signup(user: ISecurity) {
+    console.log(user, "user")
     try {
       const findUser = await models.Security.findOne({ email: user.email })
       if (findUser) {
@@ -134,5 +135,25 @@ export class AuthService {
     const secretKey: any = process.env.SECRET_KEY
 
     return { token: jwt.sign(dataStoredInToken, secretKey) }
+  }
+  public async updatePassword(data:any){
+    try {
+      const user = await models.Security.findOne({ email: data.email })
+      if (!user) {
+        throw { success: false, message: 'User not found', code: 404 }
+      }
+      const isPasswordMatching = await compare(data.oldPassword, user.password)
+      if (!isPasswordMatching) {
+        throw { success: false, message: 'Old Password is not matching', code: 401 }
+      }
+      if (data.newPassword !== data.confirmPassword) {
+        throw { success: false, message: 'Password and confirm password does not match', code: 400 }
+      }
+      user.password = await hash(data.newPassword, 10)
+      await user.save()
+      return { success: true, message: 'Password updated successfully' }
+    } catch (err: any) {
+      throw { success: false, message: err.message, code: err.code || 500 }
+    }
   }
 }

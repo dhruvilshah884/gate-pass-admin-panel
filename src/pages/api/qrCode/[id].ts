@@ -1,20 +1,20 @@
 import nextConnect from 'next-connect'
 import { NextApiResponse } from 'next'
-import { WifiService } from '@/services/wifi.service'
+import { qrCodeService } from '@/services/qrCode.service'
 import { dbConnectMiddleware } from '@/middleware/dbConnectMiddleware'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
-const service = new WifiService()
+const service = new qrCodeService()
 
 export default nextConnect()
   .use(dbConnectMiddleware)
   .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const wifi = await service.get(req.query.id as string)
+      const qrCode = await service.get(req.query.id as string)
       res.status(200).json({
         success: true,
-        data: wifi
+        data: qrCode
       })
     } catch (error: any) {
       console.error(error)
@@ -27,11 +27,11 @@ export default nextConnect()
   .put(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = req.body
-      const updateWifi = await service.update(req.query.id as string, data)
+      const updateQrCode = await service.update(req.query.id as string, data)
 
       res.status(200).json({
         success: true,
-        data: updateWifi
+        data: updateQrCode
       })
     } catch (error: any) {
       console.error(error)
@@ -43,10 +43,10 @@ export default nextConnect()
   })
   .delete(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const deleteWifi = await service.delete(req.query.id as string)
+      const deleteQrCode = await service.delete(req.query.id as string)
       res.status(200).json({
         success: true,
-        message: 'Customer deleted successfully'
+        message: 'Qr deleted successfully'
       })
     } catch (error: any) {
       console.error(error)

@@ -6,6 +6,10 @@ import { Sos } from './sos'
 import { Visitor } from './visitor'
 import { Wifi } from './wifi'
 import { Flat } from './flat.modal'
+import { Admin } from './admin'
+import { Maintenance } from './maintenance.modal'
+import { Complaint } from './complaint.modal'
+import { QrCode } from './qrCode.modal'
 export const models = {
   Attendance,
   Wifi,
@@ -14,5 +18,9 @@ export const models = {
   Security,
   Residance,
   Payroll,
-  Flat
+  Flat,
+  Admin,
+  Maintenance,
+  Complaint,
+  QrCode
 }

@@ -8,7 +8,7 @@ const service = new VisitorService()
 
 export default nextConnect()
   .use(dbConnectMiddleware)
-  // .use(authCheckMiddleware)
+  .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const visitor = await service.get(req.query.id as string)
@@ -46,7 +46,7 @@ export default nextConnect()
       const deleteVisitor = await service.delete(req.query.id as string)
       res.status(200).json({
         success: true,
-        message: 'Customer deleted successfully'
+        message: 'visitor deleted successfully'
       })
     } catch (error: any) {
       console.error(error)

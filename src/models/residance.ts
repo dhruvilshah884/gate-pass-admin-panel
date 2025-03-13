@@ -15,7 +15,7 @@ const ResidanceSchema: Schema = new Schema({
   city: { type: String, required: true },
   state: { type: String, required: true },
   faceId: { type: String },
-  pastVisitor: { type: [String] },
+  pastVisitor: [{ type: Schema.Types.ObjectId, ref: 'Visitor' }],
   flat: { type: Schema.Types.ObjectId, ref: 'Flat' },
   maintanance: { type: Number, required: true },
   avatar: { type: String }
