@@ -16,7 +16,7 @@ export class AuthService {
       }
       const hashedPassword = await hash(user.password, 10)
       user.password = hashedPassword
-      const newUser = await models.Residance.create(user)
+      const newUser = await models.Security.create(user)
       return { success: true, message: 'User created successfully', data: newUser }
     } catch (err: any) {
       throw { success: false, message: err.message, code: err.code || 500 }
