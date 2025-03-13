@@ -9,7 +9,6 @@ const AttendanceSchema: Schema = new Schema({
   shiftEndTime: { type: Date, required: true },
   qrScanLogs: { type: [String], default: [] },
   performanceRating: { type: Number, default: 0 },
-  attendanceMarked: { type: Boolean, default: false },
 });
 
 export const Attendance =

@@ -1,20 +1,20 @@
 import nextConnect from 'next-connect'
 import { NextApiResponse } from 'next'
-import { AttendanceService } from '@/services/attendance.service'
+import { MaintenceService } from '@/services/maintence.service'
 import { dbConnectMiddleware } from '@/middleware/dbConnectMiddleware'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
-const service = new AttendanceService()
+const service = new MaintenceService()
 
 export default nextConnect()
   .use(dbConnectMiddleware)
   .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const attendance = await service.get(req.query.id as string)
+      const maintanance = await service.get(req.query.id as string)
       res.status(200).json({
         success: true,
-        data: attendance
+        data: maintanance
       })
     } catch (error: any) {
       console.error(error)
@@ -27,11 +27,11 @@ export default nextConnect()
   .put(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = req.body
-      const updateAttendance = await service.updateAttendanceWithPayroll(req.query.id as string, data)
+      const updateMaintence = await service.update(req.query.id as string, data)
 
       res.status(200).json({
         success: true,
-        data: updateAttendance
+        data: updateMaintence
       })
     } catch (error: any) {
       console.error(error)
@@ -43,10 +43,10 @@ export default nextConnect()
   })
   .delete(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const deleteAttendance = await service.delete(req.query.id as string)
+      const deleteMaintence = await service.delete(req.query.id as string)
       res.status(200).json({
         success: true,
-        message: 'attendance deleted successfully'
+        message: 'maintence deleted successfully'
       })
     } catch (error: any) {
       console.error(error)
