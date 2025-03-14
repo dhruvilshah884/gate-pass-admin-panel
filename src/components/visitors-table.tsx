@@ -11,21 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { fetchVisitors } from '@/api-handler/visitors'
 import { useQuery } from 'react-query'
 
-const visitors = [
-  {
-    id: '1',
-    name: 'John Smith',
-    email: 'john@example.com',
-    phone: '1234567890',
-    vehicleNumber: 'ABC123',
-    entryTime: '2023-07-25T10:00:00Z',
-    status: 'pending',
-    residenceName: 'Alice Johnson',
-    flatNo: 'A-101'
-  }
-  // Add more dummy data
-]
-
 const statusStyles = {
   pending: {
     badge: 'bg-yellow-50 text-yellow-700 border-yellow-200',
@@ -40,6 +25,16 @@ const statusStyles = {
     icon: X
   }
 }
+const sos = {
+  false: {
+    badge: 'bg-red-50 text-red-700 border-red-200',
+    icon: X
+  },
+  true: {
+    badge: 'bg-green-50 text-green-700 border-green-200',
+    icon: Check
+  }
+}
 
 export function VisitorsTable() {
   const { data: visitorList } = useQuery(['visitorList'], () => fetchVisitors(), {
@@ -48,7 +43,6 @@ export function VisitorsTable() {
     }
   })
   const visitorListData = visitorList?.data?.data?.result
-  console.log(visitorListData, 'visitorListData')
   return (
     <div className='rounded-xl border bg-card shadow-sm overflow-hidden'>
       <div className='p-4 bg-muted/50'>
@@ -73,14 +67,18 @@ export function VisitorsTable() {
             <TableHead>Visitor</TableHead>
             <TableHead>Vehicle No.</TableHead>
             <TableHead>Entry Time</TableHead>
-            <TableHead>Residence</TableHead>
+            <TableHead>Exit Time</TableHead>
+            <TableHead>Flat No</TableHead>
+            <TableHead>Residance Name</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Sos</TableHead>
             <TableHead className='text-right'>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {visitors.map((visitor, index) => {
+          {visitorListData?.map((visitor: any, index: any) => {
             const StatusIcon = statusStyles[visitor.status as keyof typeof statusStyles].icon
+            const SosIcon = sos[visitor.emergencyFlag as keyof typeof sos].icon
             return (
               <motion.tr
                 key={visitor.id}
@@ -103,16 +101,30 @@ export function VisitorsTable() {
                 </TableCell>
                 <TableCell>{visitor.vehicleNumber}</TableCell>
                 <TableCell>{moment(visitor?.entryTime).format('MM/DD/YYYY')}</TableCell>
+                <TableCell>{moment(visitor?.exitTime).format('MM/DD/YYYY') || 'N/A'}</TableCell>
+
                 <TableCell>
                   <div>
                     <div className='font-medium'>{visitor.residenceName}</div>
-                    <div className='text-sm text-muted-foreground'>Flat: {visitor.flatNo}</div>
+                    <div className='text-sm text-muted-foreground'>{visitor.residance.flatNo}</div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div>
+                    <div className='font-medium'>{visitor.residenceName}</div>
+                    <div className='text-sm text-muted-foreground'>{visitor.residance.name}</div>
                   </div>
                 </TableCell>
                 <TableCell>
                   <Badge variant='outline' className={statusStyles[visitor.status as keyof typeof statusStyles].badge}>
                     <StatusIcon className='mr-1 h-3 w-3' />
                     {visitor.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant='outline' className={sos[visitor.emergencyFlag as keyof typeof sos].badge}>
+                    <SosIcon className='mr-1 h-3 w-3' />
+                    {visitor.emergencyFlag ? 'Yes' : 'No'}
                   </Badge>
                 </TableCell>
                 <TableCell className='text-right'>
