@@ -18,11 +18,10 @@ export default nextConnect()
       }
       const visitor = await service.create(data)
 
-      const residance = await models.Residance.findByIdAndUpdate(
-        data.residance,
-        { $push: { pastVisitor: visitor._id } }
-      )
-      res.status(201).json({ success: true, data: visitor , residance: visitor._id})
+      const residance = await models.Residance.findByIdAndUpdate(data.residance, {
+        $push: { pastVisitor: visitor._id }
+      })
+      res.status(201).json({ success: true, data: visitor, residance: visitor._id })
     } catch (error: any) {
       return res.status(error.status || 500).json({
         success: false,

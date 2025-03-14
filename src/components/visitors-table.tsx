@@ -8,6 +8,8 @@ import { Check, X, AlertTriangle } from 'lucide-react'
 import moment from 'moment'
 import { motion } from 'framer-motion'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { fetchVisitors } from '@/api-handler/visitors'
+import { useQuery } from 'react-query'
 
 const visitors = [
   {
@@ -40,6 +42,13 @@ const statusStyles = {
 }
 
 export function VisitorsTable() {
+  const { data: visitorList } = useQuery(['visitorList'], () => fetchVisitors(), {
+    onError: error => {
+      console.error('Error fetching residents:', error)
+    }
+  })
+  const visitorListData = visitorList?.data?.data?.result
+  console.log(visitorListData, 'visitorListData')
   return (
     <div className='rounded-xl border bg-card shadow-sm overflow-hidden'>
       <div className='p-4 bg-muted/50'>
