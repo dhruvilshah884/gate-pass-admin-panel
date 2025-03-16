@@ -5,14 +5,13 @@ import { ISecurity } from './security'
 
 export interface IVisitor extends CommonModal {
   name: string
-  email: string
   phone: string
   avatar?: string
   vehicleNumber: string
   vehicalType: string
   entryTime: Date
   exitTime: Date
-  status: boolean
+  status: string
   emergencyFlag: boolean
   residance: IResidance
   security: ISecurity

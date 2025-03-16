@@ -2,13 +2,17 @@ import { dbConnectMiddleware } from '@/middleware/dbConnectMiddleware'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import { AuthService } from '@/services/securityAuth.service'
+import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
+import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 
 const service = new AuthService()
 export default nextConnect()
   .use(dbConnectMiddleware)
-  .post(async (req: NextApiRequest, res: NextApiResponse) => {
+  .use(authCheckMiddleware)
+  .post(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = {
+        flat: req.user.flat as string,
         ...req.body
       }
       const user = await service.Signup(data)

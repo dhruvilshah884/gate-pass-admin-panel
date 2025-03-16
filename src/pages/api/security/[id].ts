@@ -46,7 +46,7 @@ export default nextConnect()
       const deleteSecurity = await service.delete(req.query.id as string)
       res.status(200).json({
         success: true,
-        message: 'Customer deleted successfully'
+        message: 'security deleted successfully'
       })
     } catch (error: any) {
       console.error(error)

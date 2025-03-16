@@ -8,7 +8,7 @@ export default nextConnect()
   .use(dbConnectMiddleware)
   .post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      const user = await service.signIn(req.body.email, req.body.password)
+      const user = await service.signIn(req.body.userType, req.body.email, req.body.password)
       res.status(201).json(user)
     } catch (error: any) {
       return res.status(error.status || 500).json({

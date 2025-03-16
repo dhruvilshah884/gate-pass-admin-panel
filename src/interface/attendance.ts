@@ -7,5 +7,4 @@ export interface IAttendace extends CommonModal {
   shiftEndTime: Date;
   qrScanLogs: string[];
   performanceRating: number;
-  attendanceMarked: boolean;
 }

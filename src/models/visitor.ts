@@ -5,7 +5,6 @@ import { IVisitor } from '@/interface/visitor'
 const VisitorSchema: Schema = new Schema({
   ...commonFields,
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
   avatar: { type: String },
   vehicleNumber: { type: String, required: true },

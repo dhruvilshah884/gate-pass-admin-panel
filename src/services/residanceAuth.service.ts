@@ -22,46 +22,65 @@ export class AuthService {
       throw { success: false, message: err.message, code: err.code || 500 }
     }
   }
-  public async signIn(email: string, password: string) {
+
+  public async signIn(userType: 'residance' | 'security', email: string, password: string) {
     try {
-      const findUser = await models.Residance.findOne({ email: email })
+      let findUser
+
+      if (userType === 'residance') {
+        findUser = await models.Residance.findOne({ email: email })
+      } else if (userType === 'security') {
+        findUser = await models.Security.findOne({ email: email })
+      } else {
+        throw { success: false, message: 'Invalid user type', code: 400 }
+      }
+
       if (!findUser) {
         throw { success: false, message: 'User not found', code: 404 }
       }
+
       const isPasswordMatching = await compare(password, findUser.password)
       if (!isPasswordMatching) {
-        throw { success: false, message: 'Password is not matching', code: 401 }
+        throw { success: false, message: 'Password is incorrect', code: 401 }
       }
 
-      const tokenData = this.createToken({
-        _id: findUser._id,
-        name: findUser.name,
-        avatar: findUser.avatar,
-        blockNumber: findUser.blockNumber,
-        email: findUser.email,
-        city: findUser.city,
-        flat: findUser.flat as string,
-        flatNo: findUser.flatNo,
-        locality: findUser.locality,
-        maintanance: findUser.maintanance,
-        password: '',
-        phoneNumber1: findUser.phoneNumber1,
-        state: findUser.state
-      })
+      let userData: object = {}
+
+      if (userType === 'residance') {
+        userData = {
+          _id: findUser._id,
+          name: findUser.name,
+          avatar: findUser.avatar,
+          blockNumber: findUser.blockNumber,
+          email: findUser.email,
+          city: findUser.city,
+          flat: findUser.flat as string,
+          flatNo: findUser.flatNo,
+          locality: findUser.locality,
+          maintanance: findUser.maintanance,
+          phoneNumber1: findUser.phoneNumber1,
+          state: findUser.state
+        }
+      } else if (userType === 'security') {
+        userData = {
+          _id: findUser._id,
+          name: findUser.name,
+          addressLine1: findUser.addressLine1,
+          email: findUser.email,
+          flat: findUser.flat as string,
+          phone: findUser.phone,
+          phoneNumber1: findUser.phoneNumber1,
+          proof: findUser.proof,
+          salary: findUser.salary,
+          shiftEndTime: findUser.shiftEndTime,
+          shiftTime: findUser.shiftTime
+        }
+      }
+
+      const tokenData = jwt.sign({ user: userData }, process.env.SECRET_KEY as string, { expiresIn: '7d' })
+
       return {
-        _id: findUser._id,
-        name: findUser.name,
-        avatar: findUser.avatar,
-        blockNumber: findUser.blockNumber,
-        email: findUser.email,
-        city: findUser.city,
-        flat: findUser.flat as string,
-        flatNo: findUser.flatNo,
-        locality: findUser.locality,
-        maintanance: findUser.maintanance,
-        password: '',
-        phoneNumber1: findUser.phoneNumber1,
-        state: findUser.state,
+        ...userData,
         token: tokenData
       }
     } catch (err: any) {
@@ -136,5 +155,26 @@ export class AuthService {
     const secretKey: any = process.env.SECRET_KEY
 
     return { token: jwt.sign(dataStoredInToken, secretKey) }
+  }
+
+  public async updatePassword(data: any) {
+    try {
+      const user = await models.Residance.findOne({ email: data.email })
+      if (!user) {
+        throw { success: false, message: 'User not found', code: 404 }
+      }
+      const isPasswordMatching = await compare(data.oldPassword, user.password)
+      if (!isPasswordMatching) {
+        throw { success: false, message: 'Old password is not matching', code: 401 }
+      }
+      if (data.newPassword !== data.confirmPassword) {
+        throw { success: false, message: 'Password and confirm password does not match', code: 400 }
+      }
+      user.password = await hash(data.newPassword, 10)
+      await user.save()
+      return { success: true, message: 'Password updated successfully' }
+    } catch (err: any) {
+      throw { success: false, message: err.message, code: err.code || 500 }
+    }
   }
 }
