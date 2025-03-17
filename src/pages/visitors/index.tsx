@@ -28,6 +28,16 @@ const statusStyles = {
     icon: X
   }
 }
+const sos = {
+  false: {
+    badge: 'bg-red-50 text-red-700 border-red-200',
+    icon: X
+  },
+  true: {
+    badge: 'bg-green-50 text-green-700 border-green-200',
+    icon: Check
+  }
+}
 
 export default function VisitorsPage() {
   const { data: visitorsList } = useQuery(['visitorsList'], () => fetchVisitors(), {
@@ -37,6 +47,8 @@ export default function VisitorsPage() {
   })
 
   const visitorsData = visitorsList?.data?.data?.result
+  const totalVisitors = visitorsList?.data?.data.statusCounts || 0
+  console.log(totalVisitors , "totalVisitors")
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div>
@@ -46,20 +58,11 @@ export default function VisitorsPage() {
       <div className='grid gap-6 md:grid-cols-3'>
         <Card className='hover:shadow-lg transition-all'>
           <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
-            <CardTitle className='text-sm font-medium'>Active Visitors</CardTitle>
-            <UserCheck className='h-4 w-4 text-green-500' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>12</div>
-          </CardContent>
-        </Card>
-        <Card className='hover:shadow-lg transition-all'>
-          <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
             <CardTitle className='text-sm font-medium'>Pending Approvals</CardTitle>
             <Clock className='h-4 w-4 text-yellow-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>5</div>
+            <div className='text-2xl font-bold'>{totalVisitors.pending}</div>
           </CardContent>
         </Card>
         <Card className='hover:shadow-lg transition-all'>
@@ -68,7 +71,16 @@ export default function VisitorsPage() {
             <UserX className='h-4 w-4 text-red-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>3</div>
+            <div className='text-2xl font-bold'>{totalVisitors.denied}</div>
+          </CardContent>
+        </Card>
+        <Card className='hover:shadow-lg transition-all'>
+          <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
+            <CardTitle className='text-sm font-medium'>Apprved Approvals</CardTitle>
+            <UserCheck className='h-4 w-4 text-Green-500' />
+          </CardHeader>
+          <CardContent>
+            <div className='text-2xl font-bold'>{totalVisitors.approved}</div>
           </CardContent>
         </Card>
       </div>
@@ -95,14 +107,19 @@ export default function VisitorsPage() {
               <TableHead>Visitor</TableHead>
               <TableHead>Vehicle No.</TableHead>
               <TableHead>Entry Time</TableHead>
-              <TableHead>Residence</TableHead>
+              <TableHead>Exit Time</TableHead>
+              <TableHead>Flat No</TableHead>
+              <TableHead>Residance Name</TableHead>
+              <TableHead>Purpose</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Sos</TableHead>
               <TableHead className='text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visitorsData?.map((visitor: any, index: number) => {
               const StatusIcon = statusStyles[visitor.status as keyof typeof statusStyles].icon
+              const SosIcon = sos[visitor.emergencyFlag as keyof typeof sos].icon
               return (
                 <motion.tr
                   key={visitor.id}
@@ -125,12 +142,20 @@ export default function VisitorsPage() {
                   </TableCell>
                   <TableCell>{visitor.vehicleNumber}</TableCell>
                   <TableCell>{moment(visitor?.entryTime).format('MM/DD/YYYY')}</TableCell>
+                  <TableCell>{moment(visitor?.exitTime).format('MM/DD/YYYY')}</TableCell>
                   <TableCell>
                     <div>
                       <div className='font-medium'>{visitor.residenceName}</div>
-                      <div className='text-sm text-muted-foreground'>Flat: {visitor.flatNo}</div>
+                      <div className='text-sm text-muted-foreground'>{visitor.residance.flatNo}</div>
                     </div>
                   </TableCell>
+                  <TableCell>
+                    <div>
+                      <div className='font-medium'>{visitor.residenceName}</div>
+                      <div className='text-sm text-muted-foreground'>{visitor.residance.name}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell>{visitor.purpose}</TableCell>
                   <TableCell>
                     <Badge
                       variant='outline'
@@ -138,6 +163,12 @@ export default function VisitorsPage() {
                     >
                       <StatusIcon className='mr-1 h-3 w-3' />
                       {visitor.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant='outline' className={sos[visitor.emergencyFlag as keyof typeof sos].badge}>
+                      <SosIcon className='mr-1 h-3 w-3' />
+                      {visitor.emergencyFlag ? 'Yes' : 'No'}
                     </Badge>
                   </TableCell>
                   <TableCell className='text-right'>

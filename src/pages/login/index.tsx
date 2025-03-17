@@ -1,40 +1,43 @@
 'use client'
-import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { toast } from 'sonner'
-// import '../../styles/globals.css'
+import { adminLogin } from '@/api-handler/auth'
 
 export default function LoginForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token') 
+    if (token) {
+      router.push('/dashboard')
+    }
+  }, [])
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsLoading(true)
 
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get('email')
-    const password = formData.get('password')
-
-    // Here you would typically validate against your backend
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const response = await adminLogin({ email, password })
 
-      // For demo, hardcode check
-      if (email === 'admin@example.com' && password === 'admin') {
+      if (response.success) {
+        console.log(response.data.token.token)
+        localStorage.setItem('token', response.data.token.token)
         toast.success('Logged in successfully')
         router.push('/dashboard')
       } else {
-        throw new Error('Invalid credentials')
+        throw new Error(response.message || 'Invalid credentials')
       }
-    } catch (error) {
-      toast.error('Invalid email or password')
+    } catch (error:any) {
+      toast.error(error.message || 'Invalid email or password')
     } finally {
       setIsLoading(false)
     }
@@ -52,20 +55,33 @@ export default function LoginForm() {
             <CardContent className='space-y-4 pt-6'>
               <div className='space-y-2'>
                 <Label htmlFor='email'>Email</Label>
-                <Input id='email' name='email' type='email' placeholder='admin@example.com' required />
+                <Input
+                  id='email'
+                  type='email'
+                  placeholder='admin@example.com'
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='password'>Password</Label>
-                <Input id='password' name='password' type='password' required />
+                <Input
+                  id='password'
+                  type='password'
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </CardContent>
             <CardFooter>
-              <Button className='w-full mt-6' type='submit' disabled={isLoading}>
+              <Button className='w-full mt-6 bg-black text-white' type='submit' disabled={isLoading}>
                 {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </CardFooter>
           </form>
-        </Card>{' '}
+        </Card>
       </div>
     </div>
   )

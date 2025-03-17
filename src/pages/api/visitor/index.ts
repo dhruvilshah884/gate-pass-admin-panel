@@ -39,8 +39,26 @@ export default nextConnect()
         Number(req.query.pageSize),
         req.query.sortType as string
       )
+      const pendingCount = visitors.result.filter(v => v.status === 'pending').length
+      const approvedCount = visitors.result.filter(v => v.status === 'approved').length
+      const deniedCount = visitors.result.filter(v => v.status === 'denied').length
+      const completedCount = visitors.result.filter(v => v.status === 'completed').length
 
-      res.status(200).json({ success: true, data: visitors })
+      res.status(200).json({
+      success: true,
+      data: {
+        result: visitors.result,
+        currentPage: visitors.currentPage,
+        totalPages: visitors.totalPages,
+        total: visitors.total,
+        statusCounts: {
+          pending: pendingCount,
+          approved: approvedCount,
+          denied: deniedCount,
+          completed: completedCount
+        }
+      }
+    })
     } catch (error: any) {
       console.error('Error fetching visitors:', error)
       return res.status(error.status || 500).json({

@@ -29,7 +29,8 @@ export function CreateSecurityDialog({ children }: { children: React.ReactNode }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='sm:max-w-[600px]'>
+
+      <DialogContent className='sm:max-w-[600px] bg-white'>
         <DialogHeader>
           <DialogTitle className='text-2xl'>Add Security Staff</DialogTitle>
         </DialogHeader>
@@ -92,7 +93,8 @@ export function CreateSecurityDialog({ children }: { children: React.ReactNode }
             <Button type='button' variant='outline' onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type='submit' className='px-8'>
+
+            <Button type='submit' className='px-8 bg-black text-white'>
               Add Staff
             </Button>
           </div>
