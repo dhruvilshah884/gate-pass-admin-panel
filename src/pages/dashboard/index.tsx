@@ -108,14 +108,14 @@ export default function Dashboard() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-2 gap-4 '>
                   {['Add Resident', 'Add Security', 'View Visitors', 'Settings'].map(action => (
                     <motion.button
                       key={action}
                       variants={item}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className='p-4 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors text-sm font-medium'
+                      className='p-4 rounded-lg bg-black/5 hover:bg- black/10 transition-colors text-sm font-medium'
                     >
                       {action}
                     </motion.button>
