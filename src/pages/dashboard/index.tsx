@@ -45,7 +45,6 @@ const item = {
 export default function Dashboard() {
   return (
     <div className='w-full space-y-6'>
-      {' '}
       <motion.div initial='hidden' animate='show' variants={container} className='space-y-8'>
         <motion.div variants={item}>
           <h1 className='text-3xl font-bold'>Dashboard Overview</h1>
@@ -79,7 +78,6 @@ export default function Dashboard() {
             </motion.div>
           ))}
         </motion.div>
-
         <div className='grid gap-6 md:grid-cols-2'>
           <motion.div variants={item}>
             <Card>

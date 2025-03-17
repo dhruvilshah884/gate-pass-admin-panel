@@ -41,7 +41,7 @@ export default function SecurityPage() {
         <CreateSecurityDialog>
           <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
             <PlusCircle className='mr-2 h-5 w-5' />
-            Add Security Staff
+            Add Security
           </Button>
         </CreateSecurityDialog>
       </div>

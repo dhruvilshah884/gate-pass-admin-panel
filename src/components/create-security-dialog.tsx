@@ -1,7 +1,5 @@
 'use client'
-
 import type React from 'react'
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -15,20 +13,16 @@ import { useRouter } from 'next/navigation'
 
 export function CreateSecurityDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
-  const router =  useRouter()
+  const router = useRouter()
 
-  const { mutate: securityPost, isLoading } = useMutation(
-    (data:"" ) => postSecurity(data),
-    {
-      onSuccess: data => {
-        router.push('/customers')
-      },
-      onError: error => {
-        alert(error)
-        
-      }
+  const { mutate: securityPost, isLoading } = useMutation((data: '') => postSecurity(data), {
+    onSuccess: data => {
+      router.push('/customers')
+    },
+    onError: error => {
+      alert(error)
     }
-  )
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
