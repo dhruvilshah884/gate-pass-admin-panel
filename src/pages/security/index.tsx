@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { CreateSecurityDialog } from '@/components/create-security-dialog'
+import { PersistSecurity } from '@/components/create-security-dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Edit, Trash } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -38,12 +38,14 @@ export default function SecurityPage() {
           <h1 className='text-3xl font-bold'>Security Management</h1>
           <p className='text-muted-foreground mt-2'>Manage security staff and their schedules</p>
         </div>
-        <CreateSecurityDialog>
-          <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
-            <PlusCircle className='mr-2 h-5 w-5' />
-            Add Security
-          </Button>
-        </CreateSecurityDialog>
+        <PersistSecurity>
+          <div>
+            <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
+              <PlusCircle className='mr-2 h-5 w-5' />
+              Add Security
+            </Button>
+          </div>
+        </PersistSecurity>
       </div>
       <div className='rounded-xl border bg-card shadow-sm'>
         <Table>
@@ -77,18 +79,24 @@ export default function SecurityPage() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{security.phone}</TableCell>
+                <TableCell>
+                  {security.phoneNumber1} & {security?.phoneNumber2}
+                </TableCell>
                 <TableCell>
                   <div className='text-sm'>
-                    {moment(security?.shiftTime).format('MM/DD/YYYY')} -{' '}
-                    {moment(security.shiftEndTime).format('MM/DD/YYYY')}
+                    {security?.shiftTime} - {security.shiftEndTime}
                   </div>
                 </TableCell>
                 <TableCell>₹{security.salary}</TableCell>
                 <TableCell className='text-right gap-2'>
-                  <Button variant='ghost' size='sm' className='mr-2'>
-                    <Edit className='mr-2 h-4 w-4' />{' '}
-                  </Button>
+                  <PersistSecurity id={security?._id}>
+                    <>
+                      <Button variant='ghost' size='sm' className='mr-2'>
+                        <Edit className='mr-2 h-4 w-4' />
+                      </Button>
+                    </>
+                  </PersistSecurity>
+
                   <AlertDialog.Root>
                     <AlertDialog.Trigger asChild>
                       <Button variant='ghost' size='sm' onClick={() => setDeleteId(security?._id)}>
@@ -100,7 +108,7 @@ export default function SecurityPage() {
                       <AlertDialog.Content className='fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-lg rounded-lg'>
                         <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
                         <AlertDialog.Description className='text-sm text-gray-600'>
-                          Are you sure you want to delete this Security? This action cannot be undone.
+                          Are you sure you want to delete this flat?
                         </AlertDialog.Description>
                         <div className='mt-4 flex justify-end gap-2'>
                           <AlertDialog.Cancel asChild>

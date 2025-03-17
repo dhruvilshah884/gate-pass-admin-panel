@@ -6,7 +6,6 @@ const SecuritySchema: Schema = new Schema({
   ...commonFields,
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
   avatar: { type: String },
   phoneNumber1: { type: String, required: true },
   phoneNumber2: { type: String },
