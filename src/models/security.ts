@@ -12,7 +12,7 @@ const SecuritySchema: Schema = new Schema({
   phoneNumber2: { type: String },
   addressLine1: { type: String, required: true },
   addressLine2: { type: String },
-  proof: { type: Array, required: true },
+  proof: { type: Array, required: false },
   shiftTime: { type: String, required: true },
   shiftEndTime: { type: String, required: true },
   salary: { type: Number, required: true },

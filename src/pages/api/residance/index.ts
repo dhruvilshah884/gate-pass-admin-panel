@@ -23,7 +23,7 @@ export default nextConnect()
       })
     }
   })
-  .get(async (req: NextApiRequest, res: NextApiResponse) => {
+  .get(authCheckMiddleware ,async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const residancy = await service.search(
         req.query.q as string,

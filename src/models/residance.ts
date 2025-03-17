@@ -11,13 +11,10 @@ const ResidanceSchema: Schema = new Schema({
   blockNumber: { type: String, required: true },
   phoneNumber1: { type: String, required: true },
   phoneNumber2: { type: String },
-  locality: { type: String, required: true },
-  city: { type: String, required: true },
-  state: { type: String, required: true },
   faceId: { type: String },
   pastVisitor: [{ type: Schema.Types.ObjectId, ref: 'Visitor' }],
   flat: { type: Schema.Types.ObjectId, ref: 'Flat' },
-  maintanance: { type: Number, required: true },
+  maintanance: { type: Number, default: 0 },
   avatar: { type: String }
 })
 export const Residance = mongoose.models.Residance || mongoose.model<IResidance>('Residance', ResidanceSchema)

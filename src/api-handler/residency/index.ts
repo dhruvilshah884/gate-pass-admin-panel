@@ -2,7 +2,11 @@ import axios from 'axios'
 
 export const fetchResidencies = async () => {
   try {
-    const response = await axios.get(`api/residance`)
+    const response = await axios.get(`api/residance`,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+    })
     return {
       success: true,
       data: response.data

@@ -100,7 +100,7 @@ export default function SecurityPage() {
                       <AlertDialog.Content className='fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-lg rounded-lg'>
                         <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
                         <AlertDialog.Description className='text-sm text-gray-600'>
-                          Are you sure you want to delete this residence? This action cannot be undone.
+                          Are you sure you want to delete this Security? This action cannot be undone.
                         </AlertDialog.Description>
                         <div className='mt-4 flex justify-end gap-2'>
                           <AlertDialog.Cancel asChild>

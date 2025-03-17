@@ -9,22 +9,26 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
+import { useMutation } from 'react-query'
+import { postSecurity } from '@/api-handler/security'
+import { useRouter } from 'next/navigation'
 
 export function CreateSecurityDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
+  const router =  useRouter()
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success('Security staff added successfully')
-      setOpen(false)
-    } catch (error) {
-      console.error(error)
-      toast.error('Failed to add security staff')
+  const { mutate: securityPost, isLoading } = useMutation(
+    (data:"" ) => postSecurity(data),
+    {
+      onSuccess: data => {
+        router.push('/customers')
+      },
+      onError: error => {
+        alert(error)
+        
+      }
     }
-  }
+  )
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -35,7 +39,7 @@ export function CreateSecurityDialog({ children }: { children: React.ReactNode }
           <DialogTitle className='text-2xl'>Add Security Staff</DialogTitle>
         </DialogHeader>
         <motion.form
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
           className='space-y-6 mt-4'
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

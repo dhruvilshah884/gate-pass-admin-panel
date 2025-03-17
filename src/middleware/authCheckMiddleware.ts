@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const authCheckMiddleware = async (
-  req: NextApiRequest & { user: any; security: any; residancy: any },
+  req: NextApiRequest & { user: any; security: any; residancy: any ,admin:any},
   res: NextApiResponse,
   next: any
 ) => {
@@ -25,6 +25,9 @@ const authCheckMiddleware = async (
       ...user.toObject()
     }
     req.residancy = {
+      ...user.toObject()
+    }
+    req.admin = {
       ...user.toObject()
     }
     next()

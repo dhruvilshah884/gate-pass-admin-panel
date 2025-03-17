@@ -8,11 +8,12 @@ import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 const service = new SecurityService()
 export default nextConnect()
   .use(dbConnectMiddleware)
-  // .use(authCheckMiddleware)
+  .use(authCheckMiddleware)
   .post(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = {
-        ...req.body
+        ...req.body,
+        flat: req.admin.flat
       }
       const security = await service.create(data)
       res.status(201).json({ success: true, data: security })

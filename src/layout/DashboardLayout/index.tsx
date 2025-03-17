@@ -1,14 +1,22 @@
 'use client'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
 import { School, LogOut, Home, Shield, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
+import { useRouter } from 'next/navigation'
 interface DashboardLayoutProps {
   children: ReactNode
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
+   const router = useRouter()
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token') 
+    if (!token) {
+      router.push('/login')
+    }
+  }, [])
   return (
     <div className='flex flex-col h-screen bg-gray-100'>
       <div className='hidden md:flex flex-1 overflow-hidden'>
@@ -48,6 +56,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Button
               variant='ghost'
               className='flex items-center justify-start text-red-500 w-full mt-6 hover:bg-red-100 transition-colors px-3 py-2 rounded-lg'
+              onClick={() => {
+                localStorage.removeItem('token')
+                router.push('/login')
+              }}
             >
               <LogOut className='h-5 w-5 mr-2' />
               Logout

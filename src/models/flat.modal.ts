@@ -6,6 +6,7 @@ const FlatSchema: Schema = new Schema({
   ...commonFields,
   country: { type: String, required: true },
   city: { type: String, required: true },
+  state: { type: String, required: true },
   flatName: { type: String, required: true },
   fullAddress: { type: String, required: true }
 })
