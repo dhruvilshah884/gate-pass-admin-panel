@@ -19,8 +19,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
 
   const { mutate: securityPost, isLoading } = useMutation((data: ISecurity) => postSecurity(data), {
     onSuccess: () => {
-      setOpen(true)
-      router.push('/security')
+      setOpen(false)
     },
     onError: error => {
       alert(error)
@@ -87,7 +86,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
 
   const { mutate: securityPut } = useMutation((data: ISecurity) => updateSecurity(editSecurityId as string, data), {
     onSuccess: () => {
-      router.push('/security')
+      setOpen(false)
     },
     onError: error => {
       alert(error)

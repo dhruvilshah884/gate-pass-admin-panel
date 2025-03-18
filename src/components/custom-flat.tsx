@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { motion } from 'framer-motion'
 import { useMutation, useQuery } from 'react-query'
-import { useParams, useRouter } from 'next/navigation'
 import { fetchFlatById, postFlat, updateFlat } from '@/api-handler/flat'
 import { IFlat } from '@/interface/flat'
 import { useFormik } from 'formik'
@@ -15,12 +14,11 @@ import * as Yup from 'yup'
 
 export function PersistFlat({ children, id }: { children: React.ReactNode; id?: string }) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
   const editFlatId = id
 
   const { mutate: flatPost, isLoading } = useMutation((data: IFlat) => postFlat(data), {
     onSuccess: data => {
-      router.push('/flat')
+      setOpen(false)
     },
     onError: error => {
       alert(error)
@@ -85,7 +83,7 @@ export function PersistFlat({ children, id }: { children: React.ReactNode; id?: 
   )
   const { mutate: flatPut } = useMutation((data: IFlat) => updateFlat(editFlatId as string, data), {
     onSuccess: data => {
-      router.push('/flat')
+      setOpen(false)
     },
     onError: error => {
       alert(error)
