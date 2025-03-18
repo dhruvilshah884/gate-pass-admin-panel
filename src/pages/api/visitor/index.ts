@@ -33,7 +33,7 @@ export default nextConnect()
     try {
       const visitors = await service.search(
         req.query.q as string,
-        req.query.queryBy ? (req.query.queryBy as string) : '',
+        req.query.queryBy ? (req.query.queryBy as string) : 'name',
         req.query.filter,
         Number(req.query.page),
         Number(req.query.pageSize),

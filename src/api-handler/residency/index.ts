@@ -1,11 +1,18 @@
 import axios from 'axios'
 
-export const fetchResidencies = async () => {
+export interface IFetchResidanceParams {
+  pageSize?: number
+  page?: number
+  q?: string
+}
+
+export const fetchResidencies = async (params: IFetchResidanceParams) => {
   try {
     const response = await axios.get(`api/residance`,{
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
+      params
     })
     return {
       success: true,

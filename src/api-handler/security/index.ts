@@ -1,12 +1,18 @@
 import { ISecurity } from '@/interface/security'
 import axios from 'axios'
+export interface IFetchSecurityParams {
+  pageSize?: number
+  page?: number
+  q?: string
+}
 
-export const fetchSecurity = async () => {
+export const fetchSecurity = async (params: IFetchSecurityParams) => {
   try {
     const response = await axios.get(`/api/security`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
+      },
+      params
     })
     return {
       success: true,

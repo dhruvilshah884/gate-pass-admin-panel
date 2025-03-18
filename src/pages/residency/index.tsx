@@ -13,8 +13,11 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog'
 export default function ResidencyPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const pageSize = 10
+  const [q, setQ] = useState('')
 
-  const { data: residenceList, refetch } = useQuery(['residenceList'], () => fetchResidencies(), {
+  const { data: residenceList, refetch } = useQuery(['residenceList' , page, pageSize, q], () => fetchResidencies({ page, pageSize, q }), {
     
     onError: error => {
       console.error('Error fetching residents:', error)
@@ -40,8 +43,11 @@ export default function ResidencyPage() {
         <div className='flex items-center '>
           <Input
             placeholder='Search residents...'
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            value={q}
+            onChange={e => {
+              setQ(e.target.value)
+              refetch()
+            }}
             className='w-[60%]'
           />
         </div>

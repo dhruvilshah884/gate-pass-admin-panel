@@ -12,10 +12,14 @@ import moment from 'moment'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Input } from '@/components/ui/input'
 
 export default function SecurityPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
-  const { data: securityList, refetch } = useQuery(['securityList'], () => fetchSecurity(), {
+    const [page, setPage] = useState(1)
+    const pageSize = 10
+    const [q, setQ] = useState('')
+  const { data: securityList, refetch } = useQuery(['securityList' , page, pageSize, q], () => fetchSecurity({ page, pageSize, q }), {
     onError: error => {
       console.error('Error fetching residents:', error)
     }
@@ -33,6 +37,17 @@ export default function SecurityPage() {
   })
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
+       <div className='flex items-center '>
+          <Input
+            placeholder='Search security...'
+            value={q}
+            onChange={e => {
+              setQ(e.target.value)
+              refetch()
+            }}
+            className='w-[60%]'
+          />
+        </div>
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Security Management</h1>
