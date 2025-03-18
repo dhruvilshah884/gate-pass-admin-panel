@@ -1,8 +1,15 @@
 import axios from 'axios'
 
-export const fetchVisitors = async () => {
+export interface IFetchVisitorParams {
+  pageSize?: number
+  page?: number
+  q?: string
+}
+export const fetchVisitors = async (params: IFetchVisitorParams) => {
   try {
-    const response = await axios.get('/api/visitor')
+    const response = await axios.get('/api/visitor', {
+      params
+    })
     return {
       success: true,
       data: response.data

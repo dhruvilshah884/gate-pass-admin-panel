@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Edit, Trash } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Edit, Trash } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery } from 'react-query'
 import { deleteResidency, fetchResidencies } from '@/api-handler/residency'
@@ -17,12 +17,15 @@ export default function ResidencyPage() {
   const pageSize = 10
   const [q, setQ] = useState('')
 
-  const { data: residenceList, refetch } = useQuery(['residenceList' , page, pageSize, q], () => fetchResidencies({ page, pageSize, q }), {
-    
-    onError: error => {
-      console.error('Error fetching residents:', error)
+  const { data: residenceList, refetch } = useQuery(
+    ['residenceList', page, pageSize, q],
+    () => fetchResidencies({ page, pageSize, q }),
+    {
+      onError: error => {
+        console.error('Error fetching residents:', error)
+      }
     }
-  })
+  )
   const { mutate: handlerDelete } = useMutation((id: string) => deleteResidency(id), {
     onSuccess: () => {
       console.log('Residence deleted successfully')
@@ -33,6 +36,10 @@ export default function ResidencyPage() {
     }
   })
   const residentsData = residenceList?.data?.data?.result
+  const count = residenceList?.data?.data?.total || 0
+  const handleNextPage = () => setPage(prevPage => prevPage + 1)
+  const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
+  const totalPages = Math.ceil(count / pageSize)
 
   return (
     <div className='space-y-6 '>
@@ -122,6 +129,22 @@ export default function ResidencyPage() {
           </Table>
         </div>
       </motion.div>
+      <div className='flex items-center justify-between'>
+        <p className='text-sm text-muted-foreground'>
+          Showing {page * pageSize - pageSize + 1} to {Math.min(page * pageSize, residentsData?.length)} of {''}
+          {count} entries
+        </p>
+        <div className='flex items-center space-x-2'>
+          <Button variant='outline' size='sm' onClick={handlePreviousPage} disabled={page === 1}>
+            <ChevronLeft className='h-4 w-4' />
+            Previous
+          </Button>
+          <Button variant='outline' size='sm' onClick={handleNextPage} disabled={page === totalPages}>
+            Next
+            <ChevronRight className='h-4 w-4' />
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { UserCheck, UserX, Clock } from 'lucide-react'
+import { UserCheck, UserX, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useQuery } from 'react-query'
 import { fetchVisitors } from '@/api-handler/visitors'
 import DashboardLayout from '@/layout/DashboardLayout'
+import { useState } from 'react'
 
 const statusStyles = {
   pending: {
@@ -40,15 +41,27 @@ const sos = {
 }
 
 export default function VisitorsPage() {
-  const { data: visitorsList } = useQuery(['visitorsList'], () => fetchVisitors(), {
-    onError: error => {
-      console.error('Error fetching residents:', error)
+  const [page, setPage] = useState(1)
+  const pageSize = 10
+  const [q, setQ] = useState('')
+  const { data: visitorsList, refetch } = useQuery(
+    ['visitorsList', page, pageSize, q],
+    () => fetchVisitors({ page, pageSize, q }),
+    {
+      onError: error => {
+        console.error('Error fetching residents:', error)
+      }
     }
-  })
+  )
 
   const visitorsData = visitorsList?.data?.data?.result
   const totalVisitors = visitorsList?.data?.data.statusCounts || 0
-  console.log(totalVisitors , "totalVisitors")
+  const count = visitorsList?.data?.data?.total || 0
+  const handleNextPage = () => setPage(prevPage => prevPage + 1)
+  const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
+  const totalPages = Math.ceil(count / pageSize)
+
+  console.log(totalVisitors, 'totalVisitors')
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div>
@@ -87,7 +100,15 @@ export default function VisitorsPage() {
       <div className='rounded-xl border bg-card shadow-sm overflow-hidden'>
         <div className='p-4 bg-muted/50'>
           <div className='flex items-center gap-4'>
-            <Input placeholder='Search visitors...' className='w-[50%]' />
+            <Input
+              placeholder='Search Visitors...'
+              value={q}
+              onChange={e => {
+                setQ(e.target.value)
+                refetch()
+              }}
+              className='w-[60%]'
+            />
             <Select defaultValue='all'>
               <SelectTrigger className='w-[180px]'>
                 <SelectValue placeholder='Filter by status' />
@@ -146,13 +167,13 @@ export default function VisitorsPage() {
                   <TableCell>
                     <div>
                       <div className='font-medium'>{visitor.residenceName}</div>
-                      <div className='text-sm text-muted-foreground'>{visitor.residance.flatNo}</div>
+                      <div className='text-sm text-muted-foreground'>{visitor.residance?.flatNo}</div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div>
                       <div className='font-medium'>{visitor.residenceName}</div>
-                      <div className='text-sm text-muted-foreground'>{visitor.residance.name}</div>
+                      <div className='text-sm text-muted-foreground'>{visitor.residance?.name}</div>
                     </div>
                   </TableCell>
                   <TableCell>{visitor.purpose}</TableCell>
@@ -201,6 +222,22 @@ export default function VisitorsPage() {
           </TableBody>
         </Table>
       </div>{' '}
+      <div className='flex items-center justify-between'>
+        <p className='text-sm text-muted-foreground'>
+          Showing {page * pageSize - pageSize + 1} to {Math.min(page * pageSize, visitorsData?.length)} of {''}
+          {count} entries
+        </p>
+        <div className='flex items-center space-x-2'>
+          <Button variant='outline' size='sm' onClick={handlePreviousPage} disabled={page === 1}>
+            <ChevronLeft className='h-4 w-4' />
+            Previous
+          </Button>
+          <Button variant='outline' size='sm' onClick={handleNextPage} disabled={page === totalPages}>
+            Next
+            <ChevronRight className='h-4 w-4' />
+          </Button>
+        </div>
+      </div>
     </motion.div>
   )
 }

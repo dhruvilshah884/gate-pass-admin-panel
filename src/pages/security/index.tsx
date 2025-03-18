@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { PlusCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, PlusCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { PersistSecurity } from '@/components/create-security-dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -16,15 +16,23 @@ import { Input } from '@/components/ui/input'
 
 export default function SecurityPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
-    const [page, setPage] = useState(1)
-    const pageSize = 10
-    const [q, setQ] = useState('')
-  const { data: securityList, refetch } = useQuery(['securityList' , page, pageSize, q], () => fetchSecurity({ page, pageSize, q }), {
-    onError: error => {
-      console.error('Error fetching residents:', error)
+  const [page, setPage] = useState(1)
+  const pageSize = 10
+  const [q, setQ] = useState('')
+  const { data: securityList, refetch } = useQuery(
+    ['securityList', page, pageSize, q],
+    () => fetchSecurity({ page, pageSize, q }),
+    {
+      onError: error => {
+        console.error('Error fetching residents:', error)
+      }
     }
-  })
+  )
   const securityListData = securityList?.data?.data?.result
+  const count = securityList?.data?.data?.total || 0
+  const handleNextPage = () => setPage(prevPage => prevPage + 1)
+  const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
+  const totalPages = Math.ceil(count / pageSize)
 
   const { mutate: handlerDelete } = useMutation((id: string) => deleteSecurity(id), {
     onSuccess: () => {
@@ -37,17 +45,6 @@ export default function SecurityPage() {
   })
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
-       <div className='flex items-center '>
-          <Input
-            placeholder='Search security...'
-            value={q}
-            onChange={e => {
-              setQ(e.target.value)
-              refetch()
-            }}
-            className='w-[60%]'
-          />
-        </div>
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Security Management</h1>
@@ -61,6 +58,17 @@ export default function SecurityPage() {
             </Button>
           </div>
         </PersistSecurity>
+      </div>
+      <div className='flex items-center '>
+        <Input
+          placeholder='Search security...'
+          value={q}
+          onChange={e => {
+            setQ(e.target.value)
+            refetch()
+          }}
+          className='w-[60%]'
+        />
       </div>
       <div className='rounded-xl border bg-card shadow-sm'>
         <Table>
@@ -96,7 +104,7 @@ export default function SecurityPage() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  +91{security.phoneNumber1} & {security?.phoneNumber2 || "N/A"}
+                  +91{security.phoneNumber1} & {security?.phoneNumber2 || 'N/A'}
                 </TableCell>
                 <TableCell>
                   <div className='text-sm'>
@@ -109,11 +117,9 @@ export default function SecurityPage() {
                 <TableCell>₹{security.salary}</TableCell>
                 <TableCell className='text-right gap-2'>
                   <PersistSecurity id={security?._id}>
-                    
-                      <Button variant='ghost' size='sm' className='mr-2'>
-                        <Edit className='mr-2 h-4 w-4' />
-                      </Button>
-                    
+                    <Button variant='ghost' size='sm' className='mr-2'>
+                      <Edit className='mr-2 h-4 w-4' />
+                    </Button>
                   </PersistSecurity>
 
                   <AlertDialog.Root>
@@ -153,6 +159,22 @@ export default function SecurityPage() {
           </TableBody>
         </Table>
       </div>{' '}
+      <div className='flex items-center justify-between'>
+        <p className='text-sm text-muted-foreground'>
+          Showing {page * pageSize - pageSize + 1} to {Math.min(page * pageSize, securityListData?.length)} of {''}
+          {count} entries
+        </p>
+        <div className='flex items-center space-x-2'>
+          <Button variant='outline' size='sm' onClick={handlePreviousPage} disabled={page === 1}>
+            <ChevronLeft className='h-4 w-4' />
+            Previous
+          </Button>
+          <Button variant='outline' size='sm' onClick={handleNextPage} disabled={page === totalPages}>
+            Next
+            <ChevronRight className='h-4 w-4' />
+          </Button>
+        </div>
+      </div>
     </motion.div>
   )
 }
