@@ -237,7 +237,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
                 onChange={event => {
                   const files = event.currentTarget.files
                   if (files) {
-                    const fileArray = Array.from(files).map(file => file.name) // Store file names or handle file uploads
+                    const fileArray = Array.from(files).map(file => file.name)
                     handleChange({ target: { name: 'proof', value: fileArray } })
                   }
                 }}

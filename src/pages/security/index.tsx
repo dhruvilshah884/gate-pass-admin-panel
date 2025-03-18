@@ -94,11 +94,11 @@ export default function SecurityPage() {
                 <TableCell>₹{security.salary}</TableCell>
                 <TableCell className='text-right gap-2'>
                   <PersistSecurity id={security?._id}>
-                    <>
+                    
                       <Button variant='ghost' size='sm' className='mr-2'>
                         <Edit className='mr-2 h-4 w-4' />
                       </Button>
-                    </>
+                    
                   </PersistSecurity>
 
                   <AlertDialog.Root>
