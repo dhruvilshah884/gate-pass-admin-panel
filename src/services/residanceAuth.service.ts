@@ -59,7 +59,8 @@ export class AuthService {
           locality: findUser.locality,
           maintanance: findUser.maintanance,
           phoneNumber1: findUser.phoneNumber1,
-          state: findUser.state
+          state: findUser.state,
+          role: 'residance'
         }
       } else if (userType === 'security') {
         userData = {
@@ -73,7 +74,8 @@ export class AuthService {
           proof: findUser.proof,
           salary: findUser.salary,
           shiftEndTime: findUser.shiftEndTime,
-          shiftTime: findUser.shiftTime
+          shiftTime: findUser.shiftTime,
+          role: 'security'
         }
       }
 

@@ -11,6 +11,10 @@ export default nextConnect()
   .use(dbConnectMiddleware)
   .use(authCheckMiddleware)
   .get(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
-    const user = await service.me(req.user._id as string)
-    res.json(user)
+    try {
+      const data = await service.me(req.user._id as string)
+      res.status(200).json({ data })
+    } catch (error: any) {
+      res.status(500).json({ error: error.message })
+    }
   })

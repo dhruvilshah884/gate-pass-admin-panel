@@ -32,7 +32,6 @@ export default function Dashboard() {
       console.error('Error fetching dashboard data:', error)
     }
   })
-  console.log(dashboardData?.data.data, 'dashboardData')
 
   const stats = dashboardData?.data
     ? [

@@ -1,7 +1,7 @@
 import { models } from '@/models'
 
 class userService {
-  public userData = models.Residance || models.Security
+  public userData = models.Residance || models.Security || models.Admin
 
   public async me(_id: string) {
     const user = await this.userData.findById(_id)

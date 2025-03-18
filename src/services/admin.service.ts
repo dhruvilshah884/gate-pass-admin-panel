@@ -5,13 +5,12 @@ import { compare, hash } from 'bcrypt'
 import { TokenData } from '@/interface/auth'
 import jwt from 'jsonwebtoken'
 
-
 export class AdminService extends CurdOperation<Iadmin> {
   constructor() {
-    super(models.Admin ,[{path:"flat"}])
+    super(models.Admin, [{ path: 'flat' }])
   }
 
-  public async SignUp(data:Iadmin){
+  public async SignUp(data: Iadmin) {
     const findUser = await models.Admin.findOne({ email: data.email })
     if (findUser) {
       throw { success: false, message: 'User already exists', code: 409 }
@@ -22,7 +21,7 @@ export class AdminService extends CurdOperation<Iadmin> {
     return { success: true, message: 'User created successfully', data: newUser }
   }
 
-  public async signIn(data:Iadmin){
+  public async signIn(data: Iadmin) {
     const findUser = await models.Admin.findOne({ email: data.email })
     if (!findUser) {
       throw { success: false, message: 'User not found', code: 404 }
@@ -45,13 +44,14 @@ export class AdminService extends CurdOperation<Iadmin> {
       email: findUser.email,
       password: '',
       flat: findUser.flat as string,
-      token: tokenData
+      token: tokenData,
+      role: 'admin'
     }
   }
   public createToken(user: Iadmin): TokenData {
-      const dataStoredInToken: any = { ...user, password: undefined }
-      const secretKey: any = process.env.SECRET_KEY
-  
-      return { token: jwt.sign(dataStoredInToken, secretKey) }
-    }
+    const dataStoredInToken: any = { ...user, password: undefined }
+    const secretKey: any = process.env.SECRET_KEY
+
+    return { token: jwt.sign(dataStoredInToken, secretKey) }
+  }
 }
