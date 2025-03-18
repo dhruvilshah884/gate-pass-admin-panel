@@ -24,11 +24,11 @@ export default function SecurityPage() {
 
   const { mutate: handlerDelete } = useMutation((id: string) => deleteSecurity(id), {
     onSuccess: () => {
-      console.log('Residence deleted successfully')
+      console.log('Security deleted successfully')
       refetch()
     },
     onError: error => {
-      console.error('Error deleting residence:', error)
+      console.error('Error deleting Security:', error)
     }
   })
   return (
@@ -51,9 +51,10 @@ export default function SecurityPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Staff Member</TableHead>
+              <TableHead>Security Member</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Shift Time</TableHead>
+              <TableHead>Security Address</TableHead>
               <TableHead>Salary</TableHead>
               <TableHead className='text-right'>Actions</TableHead>
             </TableRow>
@@ -80,12 +81,15 @@ export default function SecurityPage() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  {security.phoneNumber1} & {security?.phoneNumber2}
+                  +91{security.phoneNumber1} & {security?.phoneNumber2 || "N/A"}
                 </TableCell>
                 <TableCell>
                   <div className='text-sm'>
                     {security?.shiftTime} - {security.shiftEndTime}
                   </div>
+                </TableCell>
+                <TableCell>
+                  {security.addressLine1}, {security.addressLine2}
                 </TableCell>
                 <TableCell>₹{security.salary}</TableCell>
                 <TableCell className='text-right gap-2'>
@@ -108,7 +112,7 @@ export default function SecurityPage() {
                       <AlertDialog.Content className='fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-lg rounded-lg'>
                         <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
                         <AlertDialog.Description className='text-sm text-gray-600'>
-                          Are you sure you want to delete this flat?
+                          Are you sure you want to delete this Security?
                         </AlertDialog.Description>
                         <div className='mt-4 flex justify-end gap-2'>
                           <AlertDialog.Cancel asChild>

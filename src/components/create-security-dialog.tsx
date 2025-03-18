@@ -13,7 +13,6 @@ import { postSecurity, fetchSecurityById, updateSecurity } from '@/api-handler/s
 import { ISecurity } from '@/interface/security'
 
 export function PersistSecurity({ children, id }: { children: React.ReactNode; id?: string }) {
-  console.log('Children:', children)
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const editSecurityId = id
@@ -41,7 +40,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
         addressLine1: '',
         addressLine2: '',
         salary: 0,
-        proof: [] // Assuming proof is an array
+        proof: []
       },
       validationSchema: Yup.object({
         name: Yup.string().required('Full Name is required'),
