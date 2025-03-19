@@ -13,7 +13,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        security:req.security._id
+        security:req.user._id
       }
       const qrCode = await service.create(data)
       res.status(201).json({ success: true, data: qrCode })

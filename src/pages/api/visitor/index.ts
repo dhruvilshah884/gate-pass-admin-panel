@@ -13,8 +13,8 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        security: req.security._id as string,
-        flat: req.security.flat as string
+        security: req.user._id as string,
+        flat: req.user.flat as string
       }
       const visitor = await service.create(data)
 
