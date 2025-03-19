@@ -4,7 +4,9 @@ class userService {
   public userData = models.Residance || models.Security || models.Admin
 
   public async me(_id: string) {
-    const user = await this.userData.findById(_id)
+    console.log(_id , "id")
+    const user = await models.Residance.findById(_id) || await models.Security.findById(_id) || await models.Admin.findById(_id)
+
     if (!user) throw new Error('User not found')
     return user
   }

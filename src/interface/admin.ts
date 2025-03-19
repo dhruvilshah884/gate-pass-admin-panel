@@ -6,4 +6,5 @@ export interface Iadmin extends CommonModal{
     email:string
     password:string
     flat:IFlat | string
+    role?:string
 }

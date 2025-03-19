@@ -1,8 +1,7 @@
-import { DataStoredInToken } from '@/interface/auth'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 import { models } from '@/models'
 import { verify } from 'jsonwebtoken'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiResponse } from 'next'
 
 const authCheckMiddleware = async (req: NextApiRequestWithUser, res: NextApiResponse, next: any) => {
   try {
@@ -10,17 +9,13 @@ const authCheckMiddleware = async (req: NextApiRequestWithUser, res: NextApiResp
     if (!token) throw new Error('Token not provided')
 
     const decodedToken = verify(token, process.env.SECRET_KEY as string) as any
-
-    // Fetch user from the correct collection
     const [residance, security, admin] = await Promise.all([
       models.Residance.findById(decodedToken.user._id),
       models.Security.findById(decodedToken.user._id),
       models.Admin.findById(decodedToken.user._id)
     ])
-    console.log(decodedToken.user._id, 'decodedToken')
 
     const user = residance || security || admin
-    console.log(user)
     if (!user) throw new Error('User not found')
 
     req.user = user.toObject()

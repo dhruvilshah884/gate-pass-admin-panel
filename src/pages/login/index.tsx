@@ -30,7 +30,7 @@ export default function LoginForm() {
 
       if (response.success) {
         console.log(response.data.token.token)
-        localStorage.setItem('token', response.data.token.token)
+        localStorage.setItem('token', response.data.token)
         toast.success('Logged in successfully')
         router.push('/dashboard')
       } else {

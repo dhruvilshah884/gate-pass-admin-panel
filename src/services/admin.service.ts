@@ -22,36 +22,33 @@ export class AdminService extends CurdOperation<Iadmin> {
   }
 
   public async signIn(data: Iadmin) {
-    const findUser = await models.Admin.findOne({ email: data.email })
-    if (!findUser) {
-      throw { success: false, message: 'User not found', code: 404 }
-    }
-    const isPasswordValid = await compare(data.password, findUser.password)
-    if (!isPasswordValid) {
-      throw { success: false, message: 'Invalid password', code: 401 }
-    }
+    try {
+      const findUser = await models.Admin.findOne({ email: data.email })
+      if (!findUser) {
+        throw { success: false, message: 'User not found', code: 404 }
+      }
+      const isPasswordValid = await compare(data.password, findUser.password)
+      if (!isPasswordValid) {
+        throw { success: false, message: 'Invalid password', code: 401 }
+      }
 
-    const tokenData = this.createToken({
-      _id: findUser._id,
-      name: findUser.name,
-      email: findUser.email,
-      password: '',
-      flat: findUser.flat as string
-    })
-    return {
-      _id: findUser._id,
-      name: findUser.name,
-      email: findUser.email,
-      password: '',
-      flat: findUser.flat as string,
-      token: tokenData,
-      role: 'admin'
-    }
-  }
-  public createToken(user: Iadmin): TokenData {
-    const dataStoredInToken: any = { ...user, password: undefined }
-    const secretKey: any = process.env.SECRET_KEY
+      let adminData: object = {}
+      adminData = {
+        _id: findUser._id,
+        name: findUser.name,
+        email: findUser.email,
+        password: '',
+        flat: findUser.flat as string,
+        role: 'admin'
+      }
+      const tokenData = jwt.sign({ user: adminData }, process.env.SECRET_KEY as string, { expiresIn: '7d' })
 
-    return { token: jwt.sign(dataStoredInToken, secretKey) }
+      return {
+        ...adminData,
+        token: tokenData
+      }
+    } catch (err:any) {
+      throw { success: false, message: err.message, code: err.code || 500 }
+    }
   }
 }
