@@ -4,6 +4,7 @@ import nextConnect from 'next-connect'
 import { AuthService } from '@/services/securityAuth.service'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
+import { Iadmin } from '@/interface/admin'
 
 const service = new AuthService()
 export default nextConnect()
@@ -12,7 +13,7 @@ export default nextConnect()
   .post(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = {
-        flat: req.user.flat as string,
+        flat: (req.user as Iadmin).flat,
         ...req.body
       }
       const user = await service.Signup(data)

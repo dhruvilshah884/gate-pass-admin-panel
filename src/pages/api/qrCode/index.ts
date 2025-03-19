@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
+import { ISecurity } from '@/interface/security'
 
 const service = new qrCodeService()
 export default nextConnect()
@@ -13,7 +14,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        security:req.user._id
+        security:(req.user as ISecurity)._id
       }
       const qrCode = await service.create(data)
       res.status(201).json({ success: true, data: qrCode })

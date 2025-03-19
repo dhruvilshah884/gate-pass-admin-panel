@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
+import { IResidance } from '@/interface/residance'
 
 const service = new WifiService()
 export default nextConnect()
@@ -13,7 +14,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        residance:req.user._id
+        residance:(req.user as IResidance)._id
       }
       const wifi = await service.create(data)
       res.status(201).json({ success: true, data: wifi })

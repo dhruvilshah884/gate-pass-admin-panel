@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
+import { Iadmin } from '@/interface/admin'
 
 const service = new SecurityService()
 export default nextConnect()
@@ -13,7 +14,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        flat: req.user.flat
+        flat: (req.user as Iadmin).flat
       }
       const security = await service.create(data)
       res.status(201).json({ success: true, data: security })

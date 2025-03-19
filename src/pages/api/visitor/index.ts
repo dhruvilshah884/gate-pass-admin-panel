@@ -5,6 +5,7 @@ import nextConnect from 'next-connect'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 import { models } from '@/models'
+import { ISecurity } from '@/interface/security'
 
 const service = new VisitorService()
 export default nextConnect()
@@ -13,8 +14,8 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        security: req.user._id as string,
-        flat: req.user.flat as string
+        security: (req.user as ISecurity)._id,
+        flat: (req.user as ISecurity).flat,
       }
       const visitor = await service.create(data)
 

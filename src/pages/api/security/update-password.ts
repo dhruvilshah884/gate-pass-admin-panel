@@ -4,6 +4,7 @@ import nextConnect from 'next-connect'
 import { AuthService } from '@/services/securityAuth.service'
 import { NextApiRequestWithUser } from '@/interface/NextApiRequestWIthUser'
 import authCheckMiddleware from '@/middleware/authCheckMiddleware'
+import { ISecurity } from '@/interface/security'
 
 const service = new AuthService()
 export default nextConnect()
@@ -13,6 +14,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
+        email: (req.user as ISecurity).email
       }
       const user = await service.updatePassword(data)
       res.status(201).json(user)
