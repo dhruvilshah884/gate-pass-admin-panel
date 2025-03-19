@@ -13,7 +13,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        residance:req.residancy._id
+        residance:req.user._id
       }
       const wifi = await service.create(data)
       res.status(201).json({ success: true, data: wifi })

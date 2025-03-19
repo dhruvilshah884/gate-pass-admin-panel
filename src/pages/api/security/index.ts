@@ -13,7 +13,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        flat: req.admin.flat
+        flat: req.user.flat
       }
       const security = await service.create(data)
       res.status(201).json({ success: true, data: security })

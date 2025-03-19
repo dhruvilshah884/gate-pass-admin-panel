@@ -13,7 +13,6 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        email: req.residancy.email
       }
       const user = await service.updatePassword(data)
       res.status(201).json(user)
