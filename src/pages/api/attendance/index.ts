@@ -13,7 +13,7 @@ export default nextConnect()
     try {
       const data = {
         ...req.body,
-        security:req.security._id
+        security:req.user._id
       }
       const attendance = await service.createAttendaceWithPayroll(data)
       res.status(201).json({ success: true, data: attendance })
