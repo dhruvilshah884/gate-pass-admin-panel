@@ -48,16 +48,8 @@ export default function PlacePage() {
       <div className='flex items-center justify-between'>
         <h1 className='text-3xl font-bold'>Nearest Place</h1>
       </div>
-      <PersistPlace>
-        <div>
-          <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
-            <PlusCircle className='mr-2 h-5 w-5' />
-            Add Nearest Place
-          </Button>
-        </div>
-      </PersistPlace>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
-        <div className='flex items-center '>
+        <div className='flex items-center justify-between'>
           <Input
             placeholder='Search Places...'
             value={q}
@@ -67,6 +59,12 @@ export default function PlacePage() {
             }}
             className='w-[60%]'
           />
+          <PersistPlace>
+              <Button size='lg' className='shadow-lg hover:shadow-xl transition-all border border-black ' >
+                <PlusCircle className='mr-2 h-5 w-5' />
+                Add Nearest Place
+              </Button>
+          </PersistPlace>
         </div>
         <div className='rounded-lg border bg-card'>
           <Table>

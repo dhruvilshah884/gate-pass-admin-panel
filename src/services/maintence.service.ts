@@ -6,9 +6,6 @@ import cron from 'node-cron'
 export class MaintenceService extends CurdOperation<IMaintenance> {
   constructor() {
     super(models.Maintenance, [{ path: 'residance' }])
-    cron.schedule('0 9 1 * *', () => {
-      this.sendMailForMaintance()
-    })
   }
   private async sendEmail(to: string, subject: string, text: string) {
     const transporter = nodemailer.createTransport({
@@ -27,13 +24,15 @@ export class MaintenceService extends CurdOperation<IMaintenance> {
     })
   }
 
-  public async sendMailForMaintance() {
+  public async sendMailForMaintance(id:string) {
     try {
-      const residences = await models.Residance.find({})
+      const residences = await models.Residance.find({flat:id , isDeleted: false})
+      console.log(residences)
       const maintenancePromises = residences.map(async residence => {
         const maintenanceRecord = await models.Maintenance.create({
           residance: residence._id,
-          amount: residence.maintanance,
+          flat: residence.flat,
+          amount: 0,
           status: false,
           paymentMode: null,
           paymentDate: null,

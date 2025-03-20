@@ -55,7 +55,7 @@ export default function VisitorsPage() {
   )
 
   const visitorsData = visitorsList?.data?.data?.result
-  const totalVisitors = visitorsList?.data?.data.statusCounts || 0
+  const totalVisitors = visitorsList?.data?.data || 0
   const count = visitorsList?.data?.data?.total || 0
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))

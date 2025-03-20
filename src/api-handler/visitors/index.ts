@@ -8,7 +8,10 @@ export interface IFetchVisitorParams {
 export const fetchVisitors = async (params: IFetchVisitorParams) => {
   try {
     const response = await axios.get('/api/visitor', {
-      params
+      params,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     })
     return {
       success: true,

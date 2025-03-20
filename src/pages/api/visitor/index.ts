@@ -15,7 +15,7 @@ export default nextConnect()
       const data = {
         ...req.body,
         security: (req.user as ISecurity)._id,
-        flat: (req.user as ISecurity).flat,
+        flat: (req.user as ISecurity).flat
       }
       const visitor = await service.create(data)
 
@@ -30,38 +30,48 @@ export default nextConnect()
       })
     }
   })
-  .get(async (req: NextApiRequest, res: NextApiResponse) => {
+  .get(authCheckMiddleware, async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const visitors = await service.search(
-        req.query.q as string,
-        req.query.queryBy ? (req.query.queryBy as string) : 'name',
-        req.query.filter,
-        Number(req.query.page),
-        Number(req.query.pageSize),
-        req.query.sortType as string
-      )
-      const pendingCount = visitors.result.filter(v => v.status === 'pending').length
-      const approvedCount = visitors.result.filter(v => v.status === 'approved').length
-      const deniedCount = visitors.result.filter(v => v.status === 'denied').length
-      const completedCount = visitors.result.filter(v => v.status === 'completed').length
+      const { page = 1, pageSize = 10, q = '' } = req.query
+
+      const pageNumber = Number(page)
+      const limit = Number(pageSize)
+      const skip = (pageNumber - 1) * limit
+
+      const searchFilter = q
+        ? { flat: req.user.flat, isDeleted: false, name: { $regex: q, $options: 'i' } }
+        : { flat: req.user.flat, isDeleted: false }
+
+      const totalVisitors = await models.Visitor.countDocuments(searchFilter)
+
+      const visitors = await models.Visitor.find(searchFilter)
+        .populate('flat')
+        .populate('residance')
+        .populate('security')
+        .skip(skip)
+        .limit(limit)
+
+      const pendingCount = visitors.filter(v => v.status === 'pending').length
+      const approvedCount = visitors.filter(v => v.status === 'approved').length
+      const deniedCount = visitors.filter(v => v.status === 'denied').length
+      const completedCount = visitors.filter(v => v.status === 'completed').length
 
       res.status(200).json({
-      success: true,
-      data: {
-        result: visitors.result,
-        currentPage: visitors.currentPage,
-        totalPages: visitors.totalPages,
-        total: visitors.total,
-        statusCounts: {
+        success: true,
+        data: {
+          result: visitors,
+          total: totalVisitors,
+          page: pageNumber,
+          pageSize: limit,
+          totalPages: Math.ceil(totalVisitors / limit),
           pending: pendingCount,
           approved: approvedCount,
           denied: deniedCount,
-          completed: completedCount
+          completedCount
         }
-      }
-    })
+      })
     } catch (error: any) {
-      console.error('Error fetching visitors:', error)
+      console.error('Error fetching residancy:', error)
       return res.status(error.status || 500).json({
         success: false,
         message: error.message || 'Internal server error.'
