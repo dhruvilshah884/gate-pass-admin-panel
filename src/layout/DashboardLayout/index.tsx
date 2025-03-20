@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
-import { School, LogOut, Home, Shield, UserCheck, TvMinimal , HomeIcon } from 'lucide-react'
+import { School, LogOut, Home, Shield, UserCheck, TvMinimal, HomeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 interface DashboardLayoutProps {
@@ -34,11 +34,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Link>
             <Link
               href='/residency'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-purple-500 hover:text-white transition-all'
             >
               <School className='h-5 w-5' />
               <span className='font-semibold'>Residency</span>
             </Link>
+
             <Link
               href='/flat'
               className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
@@ -47,26 +48,28 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <span className='font-semibold'>Flat</span>
             </Link>
             <Link
-              href='/security '
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              href='/security'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-blue-500 hover:text-white transition-all'
             >
               <Shield className='h-5 w-5' />
               <span className='font-semibold'>Security</span>
             </Link>
             <Link
               href='/visitors'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-green-500 hover:text-white transition-all'
             >
               <UserCheck className='h-5 w-5' />
               <span className='font-semibold'>Visitors</span>
             </Link>
+
             <Link
               href='/place'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-orange-500 hover:text-white transition-all'
             >
               <HomeIcon className='h-5 w-5' />
               <span className='font-semibold'>Nearest Place</span>
             </Link>
+
             <Button
               variant='ghost'
               className='flex items-center justify-start text-red-500 w-full mt-6 hover:bg-red-100 transition-colors px-3 py-2 rounded-lg'
