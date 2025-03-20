@@ -61,7 +61,6 @@ export default function VisitorsPage() {
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
   const totalPages = Math.ceil(count / pageSize)
 
-  console.log(totalVisitors, 'totalVisitors')
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div>

@@ -1,5 +1,4 @@
 'use client'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, Shield, UserCheck, Bell, ArrowUpRight, Clock, BarChart3, Home } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -7,7 +6,6 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import { fetchDashboard } from '@/api-handler/dashboard'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-// import { Skeleton } from '@/components/ui/skeleton'
 
 const container = {
   hidden: { opacity: 0 },
@@ -34,6 +32,10 @@ export default function Dashboard() {
       console.error('Error fetching dashboard data:', error)
     }
   })
+
+  if (isLoading) {
+    return <div>Loading</div>
+  }
 
   const stats = dashboardData?.data
     ? [
@@ -117,7 +119,7 @@ export default function Dashboard() {
   ]
 
   return (
-    <div className='w-full space-y-8 p-6 max-w-7xl mx-auto bg-slate-50 white:bg-slate-900 min-h-screen'>
+    <div className='w-full space-y-8  mx-auto min-h-screen'>
       <motion.div initial='hidden' animate='show' variants={container} className='space-y-8'>
         <motion.div variants={item} className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
           <div>
