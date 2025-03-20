@@ -10,6 +10,7 @@ import { Admin } from './admin'
 import { Maintenance } from './maintenance.modal'
 import { Complaint } from './complaint.modal'
 import { QrCode } from './qrCode.modal'
+import { Place } from './nearest.modal'
 export const models = {
   Attendance,
   Wifi,
@@ -22,5 +23,6 @@ export const models = {
   Admin,
   Maintenance,
   Complaint,
-  QrCode
+  QrCode,
+  Place
 }
