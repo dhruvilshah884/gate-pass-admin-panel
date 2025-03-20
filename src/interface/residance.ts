@@ -1,5 +1,6 @@
 import { CommonModal } from './commonModel'
 import { IFlat } from './flat'
+import { IMaintenance } from './maintenance'
 import { IVisitor } from './visitor'
 
 export interface IResidance extends CommonModal {
@@ -15,6 +16,7 @@ export interface IResidance extends CommonModal {
   state: string
   faceId?: string
   pastVisitor?: IVisitor[]
+  pastMaintenance?: IMaintenance[]
   flat: IFlat | string
   maintanance: number
   avatar: string

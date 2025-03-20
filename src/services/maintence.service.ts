@@ -3,6 +3,7 @@ import { CurdOperation } from '@/utils/CURD'
 import { IMaintenance } from '@/interface/maintenance'
 import nodemailer from 'nodemailer'
 import cron from 'node-cron'
+import { IFlat } from '@/interface/flat'
 export class MaintenceService extends CurdOperation<IMaintenance> {
   constructor() {
     super(models.Maintenance, [{ path: 'residance' }])
@@ -24,15 +25,14 @@ export class MaintenceService extends CurdOperation<IMaintenance> {
     })
   }
 
-  public async sendMailForMaintance(id:string) {
+  public async sendMailForMaintance(id: string) {
     try {
-      const residences = await models.Residance.find({flat:id , isDeleted: false})
-      console.log(residences)
+      const residences = await models.Residance.find({ flat: id, isDeleted: false }).populate('flat')
       const maintenancePromises = residences.map(async residence => {
         const maintenanceRecord = await models.Maintenance.create({
           residance: residence._id,
           flat: residence.flat,
-          amount: 0,
+          amount: (residence.flat as IFlat).maintenance,
           status: false,
           paymentMode: null,
           paymentDate: null,
@@ -48,7 +48,7 @@ export class MaintenceService extends CurdOperation<IMaintenance> {
         }
       })
       await Promise.all(maintenancePromises)
-      console.log('Maintenance records created and emails sent successfully!')
+      return residences
     } catch (err) {
       console.error('Error sending maintenance emails:', err)
     }

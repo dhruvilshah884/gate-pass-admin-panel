@@ -8,6 +8,7 @@ const FlatSchema: Schema = new Schema({
   city: { type: String, required: true },
   state: { type: String, required: true },
   flatName: { type: String, required: true },
-  fullAddress: { type: String, required: true }
+  fullAddress: { type: String, required: true },
+  maintenance:{type:Number , required:true}
 })
 export const Flat = mongoose.models.Flat || mongoose.model<IFlat & Document>('Flat', FlatSchema)

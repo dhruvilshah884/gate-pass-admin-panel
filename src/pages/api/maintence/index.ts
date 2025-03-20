@@ -35,7 +35,11 @@ export default nextConnect()
 
       const totalMaintence = await models.Maintenance.countDocuments(searchFilter)
 
-      const maintence = await models.Maintenance.find(searchFilter).populate('flat').skip(skip).limit(limit)
+      const maintence = await models.Maintenance.find(searchFilter)
+        .populate('flat')
+        .populate('residance')
+        .skip(skip)
+        .limit(limit)
 
       res.status(200).json({
         success: true,

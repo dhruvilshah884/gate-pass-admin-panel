@@ -13,6 +13,7 @@ const ResidanceSchema: Schema = new Schema({
   phoneNumber2: { type: String },
   faceId: { type: String },
   pastVisitor: [{ type: Schema.Types.ObjectId, ref: 'Visitor' }],
+  pastMaintenance: [{ type: Schema.Types.ObjectId, ref: 'Maintenance' }],
   flat: { type: Schema.Types.ObjectId, ref: 'Flat' },
   maintanance: { type: Number, default: 0 },
   avatar: { type: String }
