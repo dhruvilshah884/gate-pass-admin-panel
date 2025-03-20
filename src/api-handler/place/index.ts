@@ -30,7 +30,11 @@ export const fetchPlaces = async (params: IFetchPlaceParams) => {
 
 export const deletePlace = async (id: string) => {
   try {
-    const response = await axios.delete(`api/place/${id}`)
+    const response = await axios.delete(`api/place/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     return {
       success: true,
       data: response.data
@@ -46,7 +50,11 @@ export const deletePlace = async (id: string) => {
 
 export const postPlace = async (data: INearestPlace) => {
   try {
-    const response = await axios.post(`api/place`, data)
+    const response = await axios.post(`api/place`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     return {
       success: true,
       data: response.data
@@ -62,7 +70,11 @@ export const postPlace = async (data: INearestPlace) => {
 
 export const updatePlace = async (id: string, data: INearestPlace) => {
   try {
-    const response = await axios.put(`api/place/${id}`, data)
+    const response = await axios.put(`api/place/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     return {
       success: true,
       data: response.data
@@ -78,7 +90,11 @@ export const updatePlace = async (id: string, data: INearestPlace) => {
 
 export const fetchPlaceById = async (id: string) => {
   try {
-    const response = await axios.get(`api/place/${id}`)
+    const response = await axios.get(`api/place/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     return {
       success: true,
       data: response.data

@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ChevronLeft, ChevronRight, Edit, Trash } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Edit, PlusCircle, Trash } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery } from 'react-query'
 import DashboardLayout from '@/layout/DashboardLayout'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { deletePlace, fetchPlaces } from '@/api-handler/place'
 import moment from 'moment'
+import { PersistPlace } from '@/components/custom-place'
 
 export default function PlacePage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -47,6 +48,14 @@ export default function PlacePage() {
       <div className='flex items-center justify-between'>
         <h1 className='text-3xl font-bold'>Nearest Place</h1>
       </div>
+      <PersistPlace>
+        <div>
+          <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
+            <PlusCircle className='mr-2 h-5 w-5' />
+            Add Nearest Place
+          </Button>
+        </div>
+      </PersistPlace>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
         <div className='flex items-center '>
           <Input
@@ -63,8 +72,8 @@ export default function PlacePage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Place Name</TableHead>
                 <TableHead>Category Name</TableHead>
-                <TableHead>Name</TableHead>
                 <TableHead>Address</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Timing</TableHead>
@@ -84,18 +93,21 @@ export default function PlacePage() {
                     transition={{ delay: index * 0.1 }}
                     className='group hover:bg-muted/50'
                   >
-                    <TableCell className='font-medium'>{place.categoryName}</TableCell>
                     <TableCell>{place.name}</TableCell>
+                    <TableCell className='font-medium'>{place.categoryName}</TableCell>
                     <TableCell>{place.address}</TableCell>
                     <TableCell>{place.mobileNumber}</TableCell>
-                    <TableCell>{`${moment(place.openTime).format('hh:mm A')} - ${moment(place.closeTime).format('hh:mm A')} `}</TableCell>{' '}
+                    <TableCell>
+                      {place.openTime} - {place.closeTime}
+                    </TableCell>{' '}
                     <TableCell>{place.navigaton}</TableCell>
                     <TableCell>{place.distance}</TableCell>
-
                     <TableCell className='text-right gap-2'>
-                      <Button variant='ghost' size='sm' className='mr-2'>
-                        <Edit className='mr-2 h-4 w-4' />{' '}
-                      </Button>{' '}
+                      <PersistPlace id={place?._id}>
+                        <Button variant='ghost' size='sm' className='mr-2'>
+                          <Edit className='mr-2 h-4 w-4' />
+                        </Button>
+                      </PersistPlace>
                       <AlertDialog.Root>
                         <AlertDialog.Trigger asChild>
                           <Button variant='ghost' size='sm' onClick={() => setDeleteId(place?._id)}>

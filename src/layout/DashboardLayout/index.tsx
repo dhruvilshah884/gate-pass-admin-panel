@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
-import { School, LogOut, Home, Shield, UserCheck, TvMinimal } from 'lucide-react'
+import { School, LogOut, Home, Shield, UserCheck, TvMinimal , HomeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 interface DashboardLayoutProps {
@@ -59,6 +59,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               <UserCheck className='h-5 w-5' />
               <span className='font-semibold'>Visitors</span>
+            </Link>
+            <Link
+              href='/place'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+            >
+              <HomeIcon className='h-5 w-5' />
+              <span className='font-semibold'>Nearest Place</span>
             </Link>
             <Button
               variant='ghost'

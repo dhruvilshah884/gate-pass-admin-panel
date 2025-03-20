@@ -10,8 +10,8 @@ const NearestSchema: Schema = new Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   mobileNumber: { type: String, required: true },
-  openTime: { type: Date, required: true },
-  closeTime: { type: Date, required: true },
+  openTime: { type: String, required: true },
+  closeTime: { type: String, required: true },
   navigaton: { type: String, required: true },
   distance: { type: String, required: true },
 })
