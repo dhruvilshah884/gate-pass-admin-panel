@@ -5,7 +5,7 @@ import { IResidance } from '@/interface/residance'
 const ResidanceSchema: Schema = new Schema({
   ...commonFields,
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   flatNo: { type: String, required: true },
   blockNumber: { type: String, required: true },
