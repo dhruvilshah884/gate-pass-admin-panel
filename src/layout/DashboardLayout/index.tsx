@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
-import { School, LogOut, Home, Shield, UserCheck, TvMinimal, HomeIcon,IndianRupee } from 'lucide-react'
+import { School, LogOut, Home, Shield, UserCheck, TvMinimal, HomeIcon, IndianRupee } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 interface DashboardLayoutProps {
@@ -27,7 +27,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <nav className='space-y-3'>
             <Link
               href='/dashboard'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-blue-500 hover:text-white transition-all'
             >
               <TvMinimal className='h-5 w-5' />
               <span className='font-semibold'>Dashboard</span>
@@ -42,18 +42,18 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
             <Link
               href='/flat'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-green-500 hover:text-white transition-all'
             >
               <Home className='h-5 w-5' />
               <span className='font-semibold'>Flat</span>
             </Link>
             <Link
-  href='/maintenance'
-  className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-400 hover:text-white transition-all'
->
-  <IndianRupee className='h-5 w-5' />
-  <span className='font-semibold'>Maintenance</span>
-</Link>
+              href='/maintenance'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-orange-500 hover:text-white transition-all'
+            >
+              <IndianRupee className='h-5 w-5' />
+              <span className='font-semibold'>Maintenance</span>
+            </Link>
             <Link
               href='/security'
               className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-blue-500 hover:text-white transition-all'
