@@ -6,7 +6,7 @@ export interface IComplain {
     q?: string
 }
 
-export const fetchComplains = async () => {
+export const fetchComplains = async (params: IComplain) => {
     try {
         const response = await axios.get('/api/complaint', {
             headers: {

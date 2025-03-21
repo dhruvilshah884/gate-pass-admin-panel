@@ -9,7 +9,7 @@ import { fetchWifi } from '@/api-handler/wifi'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState, useEffect } from 'react'
 
-const statusStyles = {
+const statusStyles:any = {
   pending: {
     badge: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     icon: AlertTriangle
@@ -63,7 +63,7 @@ export default function Wifi() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {wifiData.map((wifi, index) => {
+            {wifiData.map((wifi:any, index:any) => {
               const StatusIcon = statusStyles[wifi.status]?.icon || X
               return (
                 <motion.tr

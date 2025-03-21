@@ -1,6 +1,12 @@
 import axios from "axios";
 
-export const fetchWifi = async () => {
+export interface IWifi {
+    pageSize?: number
+    page?: number
+    q?: string
+}
+
+export const fetchWifi = async (params: IWifi) => {
     try {
         const response = await axios.get('/api/wifi', {
             headers: {

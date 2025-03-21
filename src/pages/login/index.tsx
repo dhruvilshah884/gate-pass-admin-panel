@@ -15,7 +15,7 @@ export default function LoginForm() {
   const [error, setError] = useState(null)
   const router = useRouter()
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event:any) => {
     event.preventDefault()
     setIsLoading(true)
     setError(null)
@@ -29,7 +29,7 @@ export default function LoginForm() {
       } else {
         throw new Error(response.message || 'Invalid credentials')
       }
-    } catch (err) {
+    } catch (err:any) {
       setError(err.message)
       toast.error(err.message)
     } finally {
