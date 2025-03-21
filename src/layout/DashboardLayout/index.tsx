@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     if (!token) {
       router.push('/login')
     }
-  }, [])
+  }, [router])
   return (
     <div className='flex flex-col h-screen bg-gray-100'>
       <div className='hidden md:flex flex-1 overflow-hidden'>
