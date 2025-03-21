@@ -8,6 +8,7 @@ const WifiSchema: Schema = new Schema({
   wifiCredentials: { type: String, required: true },
   wifiName: { type: String, required: true },
   expiryTime: { type: Date, required: false },
+  flat: { type: Schema.Types.ObjectId, ref: "Flat", required: true },
 });
 
 export const Wifi =

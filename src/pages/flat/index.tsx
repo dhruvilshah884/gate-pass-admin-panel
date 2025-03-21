@@ -67,7 +67,7 @@ export default function FlatPage() {
             </TableHeader>
             <TableBody>
               <AnimatePresence>
-                {flatListData?.map((flat: any, index: any) => (
+                {flatListData?((flat: any, index: any) => (
                   <motion.tr
                     key={flat.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -120,7 +120,7 @@ export default function FlatPage() {
                       </AlertDialog.Root>
                     </TableCell>
                   </motion.tr>
-                ))}
+                // {/* ))} */}
               </AnimatePresence>
             </TableBody>
           </Table>

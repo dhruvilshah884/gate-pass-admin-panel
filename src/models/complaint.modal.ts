@@ -8,5 +8,6 @@ const ComplaintSchema: Schema = new Schema({
     complaint: { type: String, required: true },
     status: { type: String, default: 'pending' },
     date: { type: Date, default: Date.now },
+    flat:{type:Schema.Types.ObjectId , ref: 'Flat' , required:true}
 })
 export const Complaint = mongoose.models.Complaint || mongoose.model<IComplaint>('Complaint', ComplaintSchema)
