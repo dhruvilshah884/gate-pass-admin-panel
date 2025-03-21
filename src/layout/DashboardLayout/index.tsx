@@ -1,9 +1,25 @@
 'use client'
 import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
-import { School, LogOut, Home, Shield, UserCheck, TvMinimal, HomeIcon, IndianRupee } from 'lucide-react'
+import {
+  School,
+  LogOut,
+  Home,
+  Shield,
+  UserCheck,
+  TvMinimal,
+  HomeIcon,
+  IndianRupee,
+  WifiIcon,
+  Megaphone,
+  MegaphoneIcon,
+  MegaphoneOff,
+  MapPin
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import Wifi from '@/pages/wifi'
+import Complaint from '@/pages/api/complaint'
 interface DashboardLayoutProps {
   children: ReactNode
 }
@@ -73,21 +89,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               href='/place'
               className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-orange-500 hover:text-white transition-all'
             >
-              <HomeIcon className='h-5 w-5' />
+              <MapPin className='h-5 w-5' />
               <span className='font-semibold'>Nearest Place</span>
             </Link>
             <Link
               href='/complaint'
               className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-blue-500 hover:text-white transition-all'
             >
-              <HomeIcon className='h-5 w-5' />
+              <Megaphone className='h-5 w-5' />
               <span className='font-semibold'>Complaint</span>
             </Link>
             <Link
               href='/wifi'
               className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-green-500 hover:text-white transition-all'
             >
-              <HomeIcon className='h-5 w-5' />
+              <WifiIcon className='h-5 w-5' />
               <span className='font-semibold'>Wifi</span>
             </Link>
 
