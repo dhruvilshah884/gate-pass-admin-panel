@@ -30,10 +30,12 @@ export default function FlatPage() {
       console.error('Error deleting residence:', error)
     }
   })
+  console.log('flatList -> ', flatList)
   const flatListData = flatList?.data?.data?.result
   console.log('flatListData -> ', flatListData)
 
   return (
+    <div>
     <div className='space-y-6 '>
       <div className='flex items-center justify-between'>
         <h1 className='text-3xl font-bold'>Flat</h1>
@@ -67,29 +69,29 @@ export default function FlatPage() {
             </TableHeader>
             <TableBody>
               <AnimatePresence>
-                {flatListData?((flat: any, index: any) => (
+                
                   <motion.tr
-                    key={flat.id}
+                    key={flatListData?._id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
+                    // transition={{ delay: index * 0.1 }}
                     className='group hover:bg-muted/50'
                   >
-                    <TableCell className='font-medium'>{flat.flatName}</TableCell>
-                    <TableCell>{flat.country}</TableCell>
-                    <TableCell>{flat.state}</TableCell>
-                    <TableCell>{flat.city}</TableCell>
-                    <TableCell>{flat.fullAddress}</TableCell>
+                    <TableCell className='font-medium'>{flatListData?.flatName}</TableCell>
+                    <TableCell>{flatListData?.country}</TableCell>
+                    <TableCell>{flatListData?.state}</TableCell>
+                    <TableCell>{flatListData?.city}</TableCell>
+                    <TableCell>{flatListData?.fullAddress}</TableCell>
                     <TableCell className='text-right gap-2'>
-                      <PersistFlat id={flat?._id}>
+                      <PersistFlat id={flatListData?._id}>
                         <Button variant='ghost' size='sm' className='mr-2'>
                           <Edit className='mr-2 h-4 w-4' />{' '}
                         </Button>{' '}
                       </PersistFlat>
                       <AlertDialog.Root>
                         <AlertDialog.Trigger asChild>
-                          <Button variant='ghost' size='sm' onClick={() => setDeleteId(flat?._id)}>
+                          <Button variant='ghost' size='sm' onClick={() => setDeleteId(flatListData?._id)}>
                             <Trash className='mr-2 h-4 w-4 text-red-500' />
                           </Button>
                         </AlertDialog.Trigger>
@@ -120,12 +122,13 @@ export default function FlatPage() {
                       </AlertDialog.Root>
                     </TableCell>
                   </motion.tr>
-                // {/* ))} */}
+                
               </AnimatePresence>
             </TableBody>
           </Table>
         </div>
       </motion.div>
+    </div>
     </div>
   )
 }

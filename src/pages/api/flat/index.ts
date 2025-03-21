@@ -44,7 +44,7 @@ export default nextConnect()
       res.status(200).json({
         success: true,
         data: {
-          result: flatData,
+          result: flats,
           total: totalFlats,
           page: pageNumber,
           pageSize: limit,

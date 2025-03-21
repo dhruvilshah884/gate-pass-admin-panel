@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery } from 'react-query'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { fetchMaintenance, postMaintenance } from '@/api-handler/maintence'
+import moment from 'moment'
 
 export default function Maintenance() {
   const [page, setPage] = useState(1)
@@ -127,7 +128,7 @@ export default function Maintenance() {
                     <TableCell>{maintenance.residance.name}</TableCell>
                     <TableCell>{maintenance.amount}</TableCell>
                     <TableCell>{maintenance.paymentMode || 'N/A'}</TableCell>
-                    <TableCell>{maintenance.paymentDate || 'N/A'}</TableCell>
+                    <TableCell>{moment(maintenance.paymentDate).format('DD-MM-YYYY')}</TableCell>
                     <TableCell>{maintenance.paymentProof || 'N/A'}</TableCell>
                     <TableCell>{maintenance.paymentMonth || 'N/A'}</TableCell>
                     <TableCell>{maintenance.status ? 'Success' : 'Pending'}</TableCell>
