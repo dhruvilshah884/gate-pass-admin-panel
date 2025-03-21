@@ -76,6 +76,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <HomeIcon className='h-5 w-5' />
               <span className='font-semibold'>Nearest Place</span>
             </Link>
+            <Link
+              href='/complain'
+              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 dark:text-black hover:bg-blue-500 hover:text-white transition-all'
+            >
+              <HomeIcon className='h-5 w-5' />
+              <span className='font-semibold'>Complain</span>
+            </Link>
 
             <Button
               variant='ghost'

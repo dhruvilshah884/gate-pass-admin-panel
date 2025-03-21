@@ -7,7 +7,7 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-     "baseUrl": ".",
+    "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/complain/index.jsx"],
   "exclude": ["node_modules"]
 }
