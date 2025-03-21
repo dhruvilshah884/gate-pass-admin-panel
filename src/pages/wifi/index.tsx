@@ -1,12 +1,11 @@
 'use client'
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { AlertTriangle, Check, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { AlertTriangle, Check, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import moment from 'moment'
 import { useQuery } from 'react-query'
-import { fetchComplains } from '@/api-handler/complain'
+import { fetchWifi } from '@/api-handler/wifi'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState, useEffect } from 'react'
 
@@ -25,26 +24,22 @@ const statusStyles = {
   }
 }
 
-export default function Complain() {
+export default function Wifi() {
   const [page, setPage] = useState(1)
   const pageSize = 10
 
-  const { data: complainsList, refetch } = useQuery(
-    ['complainsList', page, pageSize],
-    () => fetchComplains({ page, pageSize }),
-    {
-      onError: error => {
-        console.error('Error fetching complaints:', error)
-      }
+  const { data: wifiList, refetch } = useQuery(['wifiList', page, pageSize], () => fetchWifi({ page, pageSize }), {
+    onError: error => {
+      console.error('Error fetching wifi credentials:', error)
     }
-  )
+  })
 
-  const complainsData = complainsList?.data?.data?.result || []
-  const count = complainsList?.data?.data?.total || 0
+  const wifiData = wifiList?.data?.data?.result || []
+  const totalCount = wifiList?.data?.data?.total || 0
+  const totalPages = Math.ceil(totalCount / pageSize)
 
-  const handleNextPage = () => setPage(prevPage => Math.min(prevPage + 1, Math.ceil(count / pageSize)))
+  const handleNextPage = () => setPage(prevPage => Math.min(prevPage + 1, totalPages))
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
-  const totalPages = Math.ceil(count / pageSize)
 
   useEffect(() => {
     refetch()
@@ -53,53 +48,45 @@ export default function Complain() {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div>
-        <h1 className='text-3xl font-bold'>Complaint Management</h1>
-        <p className='text-muted-foreground mt-2'>Track and manage all complaints</p>
+        <h1 className='text-3xl font-bold'>WiFi Credentials</h1>
+        <p className='text-muted-foreground mt-2'>Manage and track all WiFi credentials</p>
       </div>
+
       <div className='rounded-xl border bg-card shadow-sm overflow-hidden'>
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Flat No</TableHead>
               <TableHead>Residence</TableHead>
-              <TableHead>Complaint</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>WiFi Name</TableHead>
+              <TableHead>WiFi Credentials</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {complainsData.map((complaint, index) => {
-              const StatusIcon = statusStyles[complaint.status].icon
+            {wifiData.map((wifi, index) => {
+              const StatusIcon = statusStyles[wifi.status]?.icon || X
               return (
                 <motion.tr
-                  key={complaint.id}
+                  key={wifi.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className='group hover:bg-muted/50'
                 >
-                  <TableCell>{complaint.residance.name}</TableCell>
-                  <TableCell>{complaint.complaint}</TableCell>
-                  <TableCell>{moment(complaint.date).format('MM/DD/YYYY')}</TableCell>
-                  <TableCell className='flex items-center'>
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium shadow-md transition-all
-      ${statusStyles[complaint.status].badge}`}
-                    >
-                      <StatusIcon className='h-4 w-4' style={{ color: statusStyles[complaint.status].iconColor }} />
-                      {complaint.status}
-                    </motion.span>
-                  </TableCell>
+                  <TableCell>{wifi.residance?.flatNo || 'N/A'}</TableCell>
+                  <TableCell>{wifi.residance?.name || 'N/A'}</TableCell>
+                  <TableCell>{wifi.wifiName}</TableCell>
+                  <TableCell>{wifi.wifiCredentials}</TableCell>
                 </motion.tr>
               )
             })}
           </TableBody>
         </Table>
       </div>
+
       <div className='flex items-center justify-between'>
         <p className='text-sm text-muted-foreground'>
-          Showing {page * pageSize - pageSize + 1} to {Math.min(page * pageSize, complainsData.length)} of {count}{' '}
+          Showing {page * pageSize - pageSize + 1} to {Math.min(page * pageSize, wifiData.length)} of {totalCount}{' '}
           entries
         </p>
         <div className='flex items-center space-x-2'>
@@ -117,4 +104,4 @@ export default function Complain() {
   )
 }
 
-Complain.layout = DashboardLayout
+Wifi.layout = DashboardLayout
