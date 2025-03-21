@@ -31,6 +31,7 @@ export default function FlatPage() {
     }
   })
   const flatListData = flatList?.data?.data?.result
+  console.log('flatListData -> ', flatListData)
 
   return (
     <div className='space-y-6 '>
