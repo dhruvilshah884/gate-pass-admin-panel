@@ -17,7 +17,7 @@ export default nextConnect()
         security: (req.user as ISecurity)._id,
         flat: (req.user as ISecurity).flat
       }
-      const visitor = await service.create(data)
+      const visitor = await service.createVisitor(data)
 
       const residance = await models.Residance.findByIdAndUpdate(data.residance, {
         $push: { pastVisitor: visitor._id }

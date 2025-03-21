@@ -27,7 +27,7 @@ export default nextConnect()
   .put(async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = req.body
-      const updateMaintence = await service.update(req.query.id as string, data)
+      const updateMaintence = await service.updateMaintenanceStatus(req.query.id as string, data)
 
       res.status(200).json({
         success: true,

@@ -87,21 +87,18 @@ export default function Maintenance() {
               refetch()
             }}
             className='w-[60%]'
-          />
-        </div>
-        <div className='flex justify-end mt-4'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => mainteancePost()}
-            disabled={isLoading || remainingTime !== null}
-          >
-            {remainingTime !== null
-              ? `Disabled: ${formatTime(remainingTime)}`
-              : isLoading
-              ? 'Sending...'
-              : 'Send All Mails'}
-          </Button>
+          /><Button
+          variant='outline'
+          size='default'
+          onClick={() => mainteancePost()}
+          disabled={isLoading || remainingTime !== null}
+        >
+          {remainingTime !== null
+            ? `Disabled: ${formatTime(remainingTime)}`
+            : isLoading
+            ? 'Sending...'
+            : 'Send All Mails'}
+        </Button>
         </div>
         <div className='rounded-lg border bg-card'>
           <Table>

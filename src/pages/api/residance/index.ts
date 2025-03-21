@@ -38,7 +38,7 @@ export default nextConnect()
 
       const totalResidancies = await models.Residance.countDocuments(searchFilter)
 
-      const residancy = await models.Residance.find(searchFilter).populate('flat').skip(skip).limit(limit)
+      const residancy = await models.Residance.find(searchFilter).populate('flat').populate("pastMaintenance").skip(skip).limit(limit)
 
       res.status(200).json({
         success: true,

@@ -31,6 +31,21 @@ export class VisitorService extends CurdOperation<IVisitor> {
       text
     })
   }
+  public async createVisitor(data: any) {
+    const visitor = await models.Visitor.create(data)
+    const residance = await models.Residance.findById(data.residance)
+    if (!residance) {
+      throw new Error('Residance not found')
+    }
+    if (residance.email) {
+      await this.sendEmail(
+        residance.email,
+        'New Visitor',
+        `Hello ${residance.name}, a new visitor has arrived. Please approve or reject the visit.`
+      )
+    }
+    return visitor
+  }
 
   public async statusUpdate(id: string, status: IStatus) {
     const visitorDetails = await models.Visitor.findById(id)

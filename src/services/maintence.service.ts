@@ -2,7 +2,7 @@ import { models } from '@/models'
 import { CurdOperation } from '@/utils/CURD'
 import { IMaintenance } from '@/interface/maintenance'
 import nodemailer from 'nodemailer'
-import cron from 'node-cron'
+import Razorpay from "razorpay";
 import { IFlat } from '@/interface/flat'
 export class MaintenceService extends CurdOperation<IMaintenance> {
   constructor() {
@@ -39,11 +39,16 @@ export class MaintenceService extends CurdOperation<IMaintenance> {
           paymentProof: null,
           paymentMonth: new Date().toISOString().slice(0, 7)
         })
+        await models.Residance.findByIdAndUpdate(
+          residence._id,
+          { $push: { pastMaintenance: maintenanceRecord._id } },
+          { new: true }
+        )
         if (residence.email) {
           await this.sendEmail(
             residence.email,
             'Monthly Maintenance Due',
-            `Dear ${residence.name},\n\nYour maintenance fee of ₹${residence.maintanance} is due for ${maintenanceRecord.paymentMonth}. Please make the payment at your earliest convenience.\n\nThank you!`
+            `Dear ${residence.name},\n\nYour maintenance fee of ₹${residence.flat.maintenance} is due for ${maintenanceRecord.paymentMonth}. Please make the payment at your earliest convenience.\n\nThank you!`
           )
         }
       })
@@ -51,6 +56,51 @@ export class MaintenceService extends CurdOperation<IMaintenance> {
       return residences
     } catch (err) {
       console.error('Error sending maintenance emails:', err)
+    }
+  }
+
+  public async updateMaintenanceStatus(id: string, paymentData: any) {
+    try {
+      const razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID!,
+        key_secret: process.env.RAZORPAY_KEY_SECRET!,
+      });
+      const maintenance = await models.Maintenance.findById(id);
+      if (!maintenance) {
+        throw new Error("Maintenance not found");
+      }
+  
+      const order = await razorpay.orders.create({
+        amount: maintenance.amount * 100, 
+        currency: "INR",
+        receipt: `receipt_${maintenance._id}`,
+        payment_capture: 1 as any,
+      });
+  
+      if (!paymentData.razorpay_payment_id) {
+        throw new Error("Payment ID is required.");
+      }
+  
+      const payment = await razorpay.payments.fetch(paymentData.razorpay_payment_id);
+  
+      if (payment.status === "captured") {
+        maintenance.status = true;
+        maintenance.paymentMode = "Razorpay";
+        maintenance.paymentDate = new Date();
+        maintenance.paymentProof = paymentData.razorpay_payment_id;
+        await maintenance.save();
+  
+        return {
+          success: true,
+          message: "Payment successful, maintenance updated",
+          maintenance,
+        };
+      } else {
+        throw new Error("Payment failed or not captured");
+      }
+    } catch (err:any) {
+      console.error("Error updating maintenance status:", err);
+      return { success: false, message: err.message };
     }
   }
 }
