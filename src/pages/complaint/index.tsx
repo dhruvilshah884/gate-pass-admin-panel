@@ -80,11 +80,16 @@ export default function Complain() {
                   <TableCell>{complaint.residance.name}</TableCell>
                   <TableCell>{complaint.complaint}</TableCell>
                   <TableCell>{moment(complaint.date).format('MM/DD/YYYY')}</TableCell>
-                  <TableCell>
-                    <span className={`px-2 py-1 rounded-md text-sm ${statusStyles[complaint.status].badge}`}>
-                      <StatusIcon className='mr-1 h-3 w-3' />
+                  <TableCell className='flex items-center'>
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium shadow-md transition-all
+      ${statusStyles[complaint.status].badge}`}
+                    >
+                      <StatusIcon className='h-4 w-4' style={{ color: statusStyles[complaint.status].iconColor }} />
                       {complaint.status}
-                    </span>
+                    </motion.span>
                   </TableCell>
                 </motion.tr>
               )
