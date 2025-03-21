@@ -12,36 +12,37 @@ export default function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
   const router = useRouter()
 
-  useEffect(() => {
-    const token = localStorage.getItem('token') 
-    if (token) {
-      router.push('/dashboard')
-    }
-  }, [])
-
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async event => {
     event.preventDefault()
     setIsLoading(true)
+    setError(null)
 
     try {
       const response = await adminLogin({ email, password })
-
       if (response.success) {
-        console.log(response.data.token.token)
         localStorage.setItem('token', response.data.token)
         toast.success('Logged in successfully')
         router.push('/dashboard')
       } else {
         throw new Error(response.message || 'Invalid credentials')
       }
-    } catch (error:any) {
-      toast.error(error.message || 'Invalid email or password')
+    } catch (err) {
+      setError(err.message)
+      toast.error(err.message)
     } finally {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      router.push('/dashboard')
+    }
+  }, [])
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50'>
@@ -51,7 +52,7 @@ export default function LoginForm() {
           <p className='text-muted-foreground mt-2'>Enter your credentials to access the admin panel</p>
         </div>
         <Card>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit}>
             <CardContent className='space-y-4 pt-6'>
               <div className='space-y-2'>
                 <Label htmlFor='email'>Email</Label>
@@ -61,7 +62,7 @@ export default function LoginForm() {
                   placeholder='admin@example.com'
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                 />
               </div>
               <div className='space-y-2'>
@@ -71,10 +72,30 @@ export default function LoginForm() {
                   type='password'
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                 />
               </div>
+              {error && (
+                <div className='w-full max-w-sm bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded-md flex items-center gap-3 mt-4 shadow-md'>
+                  <svg
+                    className='w-5 h-5 text-red-600'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M12 9v2m0 4h.01M10.29 3.86a1 1 0 011.42 0l7.29 7.29a1 1 0 010 1.42l-7.29 7.29a1 1 0 01-1.42 0L3.86 12.57a1 1 0 010-1.42l7.29-7.29z'
+                    ></path>
+                  </svg>
+                  <span className='text-sm font-medium'>{error}</span>
+                </div>
+              )}
             </CardContent>
+
             <CardFooter>
               <Button className='w-full mt-6 bg-black text-white' type='submit' disabled={isLoading}>
                 {isLoading ? 'Logging in...' : 'Login'}
