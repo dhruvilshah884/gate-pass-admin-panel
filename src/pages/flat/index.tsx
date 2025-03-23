@@ -30,46 +30,43 @@ export default function FlatPage() {
       console.error('Error deleting residence:', error)
     }
   })
-  console.log('flatList -> ', flatList)
   const flatListData = flatList?.data?.data?.result
-  console.log('flatListData -> ', flatListData)
 
   return (
     <div>
-    <div className='space-y-6 '>
-      <div className='flex items-center justify-between'>
-        <h1 className='text-3xl font-bold'>Flat</h1>
-        <PersistFlat id={undefined}>
-          <Button size='lg' className='shadow-lg hover:shadow-xl transition-all border border-black'>
-            <PlusCircle className='mr-2 h-5 w-5' />
-            Add Flat
-          </Button>
-        </PersistFlat>
-      </div>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
-        <div className='flex items-center '>
-          <Input
-            placeholder='Search flat...'
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            className='w-[60%]'
-          />
+      <div className='space-y-6 '>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-3xl font-bold'>Flat</h1>
+          {/* <PersistFlat id={undefined}>
+            <Button size='lg' className='shadow-lg hover:shadow-xl transition-all border border-black'>
+              <PlusCircle className='mr-2 h-5 w-5' />
+              Add Flat
+            </Button>
+          </PersistFlat> */}
         </div>
-        <div className='rounded-lg border bg-card'>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Flat Name</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>State</TableHead>
-                <TableHead>City</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead className='text-right'>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <AnimatePresence>
-                
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
+          {/* <div className='flex items-center '>
+            <Input
+              placeholder='Search flat...'
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className='w-[60%]'
+            />
+          </div> */}
+          <div className='rounded-lg border bg-card'>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Flat Name</TableHead>
+                  <TableHead>Country</TableHead>
+                  <TableHead>State</TableHead>
+                  <TableHead>City</TableHead>
+                  <TableHead>Address</TableHead>
+                  <TableHead className='text-right'>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <AnimatePresence>
                   <motion.tr
                     key={flatListData?._id}
                     initial={{ opacity: 0, y: 20 }}
@@ -89,7 +86,7 @@ export default function FlatPage() {
                           <Edit className='mr-2 h-4 w-4' />{' '}
                         </Button>{' '}
                       </PersistFlat>
-                      <AlertDialog.Root>
+                      {/* <AlertDialog.Root>
                         <AlertDialog.Trigger asChild>
                           <Button variant='ghost' size='sm' onClick={() => setDeleteId(flatListData?._id)}>
                             <Trash className='mr-2 h-4 w-4 text-red-500' />
@@ -119,16 +116,15 @@ export default function FlatPage() {
                             </div>
                           </AlertDialog.Content>
                         </AlertDialog.Portal>
-                      </AlertDialog.Root>
+                      </AlertDialog.Root> */}
                     </TableCell>
                   </motion.tr>
-                
-              </AnimatePresence>
-            </TableBody>
-          </Table>
-        </div>
-      </motion.div>
-    </div>
+                </AnimatePresence>
+              </TableBody>
+            </Table>
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }
