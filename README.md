@@ -60,3 +60,6 @@ qrCode ==> ✅ testing ==> ❌
 <!-- think and create the logic for the wifi -->
 <!-- add proper design in maintence for status -->
 <!-- now change in the maintence to send the sperate link and send the seperat link do not add the load and in the maintence pass the button to send then mail for the maintence and pass the filter by the residance name in the maintenace table  -->
+
+<!-- backend QA -->
+<!-- test the attendace , payroll and qr code module test  -->
