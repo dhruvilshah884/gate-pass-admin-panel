@@ -48,6 +48,15 @@ visitor ==>✅ testing ==> ✅
 wifi ==>✅ testing ==> ✅
 qrCode ==> ✅ testing ==> ❌
 
-<!-- accept and reject api for visitor in mail -->
-<!-- make payment in the mail for the maintenace  -->
+<!--create a razorpay webhooks for real payment  -->
 <!-- full qa  -->
+<!--  QA-->
+<!-- residance edit -->
+<!-- add inout type file in flat model to store a multiple photoes -->
+<!-- add filter in visitor model for status -->
+<!-- remove loading in all  -->
+<!-- when i am edit the security then i got an error refect is not a function -->
+<!-- add edit button to edit the complaint -->
+<!-- think and create the logic for the wifi -->
+<!-- add proper design in maintence for status -->
+<!-- now change in the maintence to send the sperate link and send the seperat link do not add the load and in the maintence pass the button to send then mail for the maintence and pass the filter by the residance name in the maintenace table  -->
