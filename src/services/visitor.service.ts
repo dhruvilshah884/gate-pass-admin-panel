@@ -15,7 +15,7 @@ export class VisitorService extends CurdOperation<IVisitor> {
     super(models.Visitor, [{ path: 'flat' }, { path: 'residance' }, { path: 'security' }])
   }
 
-  private async sendEmail(to: string, subject: string, text: string) {
+  private async sendEmail(to: string, subject: string, html: string) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -28,22 +28,56 @@ export class VisitorService extends CurdOperation<IVisitor> {
       from: process.env.EMAIL_USER,
       to,
       subject,
-      text
+      html
     })
   }
   public async createVisitor(data: any) {
     const visitor = await models.Visitor.create(data)
-    const residance = await models.Residance.findById(data.residance)
-    if (!residance) {
-      throw new Error('Residance not found')
+    const residence = await models.Residance.findById(data.residance)
+
+    if (!residence) {
+      throw new Error('Residence not found')
     }
-    if (residance.email) {
-      await this.sendEmail(
-        residance.email,
-        'New Visitor',
-        `Hello ${residance.name}, a new visitor has arrived. Please approve or reject the visit.`
-      )
+
+    if (residence.email) {
+      // Generate a secure URL with visitor ID
+      const acceptUrl = `https://yourdomain.com/api/visitor/action?id=${visitor._id}&action=approve`
+      const rejectUrl = `https://yourdomain.com/api/visitor/action?id=${visitor._id}&action=reject`
+
+      const emailHtml = `
+       <body style="background-color: #f4f4f4; padding: 20px; font-family: Arial, sans-serif;">
+
+  <div style="max-width: 600px; background: #ffffff; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center;">
+    
+    <h2 style="color: #333;">🚪 New Visitor Alert</h2>
+    <p style="color: #666;">A visitor is waiting for your approval.</p>
+
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; text-align: left;">
+      <p><strong>Name:</strong> ${visitor.name}</p>
+      <p><strong>Phone:</strong> <a href="tel:${visitor.phone}" style="color: #007bff; text-decoration: none;">${
+        visitor.phone
+      }</a></p>
+      <p><strong>Vehicle Number:</strong> ${visitor.vehicleNumber}</p>
+      <p><strong>Entry Time:</strong> ${new Date(visitor.entryTime).toLocaleString()}</p>
+    </div>
+
+    <p style="margin-top: 20px; color: #444;">Please approve or reject the visitor.</p>
+
+    <div style="margin-top: 20px;">
+      <a href="${acceptUrl}" style="background: #28a745; color: white; padding: 12px 25px; text-decoration: none; font-size: 16px; border-radius: 5px; font-weight: bold; margin-right: 10px; display: inline-block;">✅ Accept</a>
+      <a href="${rejectUrl}" style="background: #dc3545; color: white; padding: 12px 25px; text-decoration: none; font-size: 16px; border-radius: 5px; font-weight: bold; display: inline-block;">❌ Reject</a>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 12px; color: #888;">If you did not request this, please ignore this email.</p>
+
+  </div>
+
+</body>
+      `
+
+      await this.sendEmail(residence.email, 'New Visitor Notification', emailHtml)
     }
+
     return visitor
   }
 
