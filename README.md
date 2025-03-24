@@ -43,10 +43,11 @@ maintenance ==>✅ testing ==> ✅
 payroll ==> ✅ testing ==> ❌
 residace ==>✅ testing ==> ✅
 security ==>✅ testing ==> ✅
-sos ==>✅  testing ==> ✅
+sos ==>✅ testing ==> ✅
 visitor ==>✅ testing ==> ✅
 wifi ==>✅ testing ==> ✅
 qrCode ==> ✅ testing ==> ❌
 
-
-
+<!-- accept and reject api for visitor in mail -->
+<!-- make payment in the mail for the maintenace  -->
+<!-- full qa  -->

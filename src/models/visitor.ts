@@ -8,7 +8,7 @@ const VisitorSchema: Schema = new Schema({
   phone: { type: String, required: true },
   avatar: { type: String },
   vehicleNumber: { type: String, required: true },
-  entryTime: { type: Date, required: true, default: Date.now },
+  entryTime: { type: Date },
   exitTime: { type: Date },
   status: {
     type: String,
