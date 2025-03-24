@@ -9,6 +9,7 @@ import { useQuery } from 'react-query'
 import { fetchComplains } from '@/api-handler/complain'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState, useEffect } from 'react'
+import ScreenLoading from '@/components/ScreenLoading'
 
 const statusStyles: any = {
   pending: {
@@ -29,15 +30,15 @@ export default function Complain() {
   const [page, setPage] = useState(1)
   const pageSize = 10
 
-  const { data: complainsList, refetch } = useQuery(
-    ['complainsList', page, pageSize],
-    () => fetchComplains({ page, pageSize }),
-    {
-      onError: error => {
-        console.error('Error fetching complaints:', error)
-      }
+  const {
+    data: complainsList,
+    refetch,
+    isLoading
+  } = useQuery(['complainsList', page, pageSize], () => fetchComplains({ page, pageSize }), {
+    onError: error => {
+      console.error('Error fetching complaints:', error)
     }
-  )
+  })
 
   const complainsData = complainsList?.data?.data?.result || []
   const count = complainsList?.data?.data?.total || 0
@@ -49,6 +50,10 @@ export default function Complain() {
   useEffect(() => {
     refetch()
   }, [page, refetch])
+
+  if (isLoading) {
+    return <ScreenLoading />
+  }
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>

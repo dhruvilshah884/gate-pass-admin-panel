@@ -6,6 +6,7 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import { fetchDashboard } from '@/api-handler/dashboard'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
+import ScreenLoading from '@/components/ScreenLoading'
 
 const container = {
   hidden: { opacity: 0 },
@@ -33,9 +34,6 @@ export default function Dashboard() {
     }
   })
 
-  if (isLoading) {
-    return <div>Loading</div>
-  }
   const notification = dashboardData?.data?.data.complaints
 
   const stats = dashboardData?.data
@@ -118,7 +116,9 @@ export default function Dashboard() {
       textColor: 'text-amber-600'
     }
   ]
-
+  if (isLoading) {
+    return <ScreenLoading />
+  }
   return (
     <div className='w-full space-y-8  mx-auto min-h-screen'>
       <motion.div initial='hidden' animate='show' variants={container} className='space-y-8'>
@@ -143,7 +143,6 @@ export default function Dashboard() {
             </motion.div>
           </Link>
         </motion.div>
-
         {isLoading ? (
           <div className='grid gap-6 md:grid-cols-3'>
             {[1, 2, 3].map((_, i) => (
@@ -217,7 +216,7 @@ export default function Dashboard() {
                     </span>
                   </CardTitle>
                   <Link
-                    href='/activities'
+                    href='/'
                     className='text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium hover:underline'
                   >
                     View all

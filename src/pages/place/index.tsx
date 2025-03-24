@@ -11,6 +11,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { deletePlace, fetchPlaces } from '@/api-handler/place'
 import moment from 'moment'
 import { PersistPlace } from '@/components/custom-place'
+import ScreenLoading from '@/components/ScreenLoading'
 
 export default function PlacePage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -19,15 +20,15 @@ export default function PlacePage() {
   const pageSize = 10
   const [q, setQ] = useState('')
 
-  const { data: placeList, refetch } = useQuery(
-    ['placesList', page, pageSize, q],
-    () => fetchPlaces({ page, pageSize, q }),
-    {
-      onError: error => {
-        console.error('Error fetching places:', error)
-      }
+  const {
+    data: placeList,
+    refetch,
+    isLoading
+  } = useQuery(['placesList', page, pageSize, q], () => fetchPlaces({ page, pageSize, q }), {
+    onError: error => {
+      console.error('Error fetching places:', error)
     }
-  )
+  })
   const { mutate: handlerDelete } = useMutation((id: string) => deletePlace(id), {
     onSuccess: () => {
       console.log('Place deleted successfully')
@@ -42,6 +43,10 @@ export default function PlacePage() {
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
   const totalPages = Math.ceil(count / pageSize)
+
+  if (isLoading) {
+    return <ScreenLoading />
+  }
 
   return (
     <div className='space-y-6 '>
@@ -59,11 +64,11 @@ export default function PlacePage() {
             }}
             className='w-[60%]'
           />
-          <PersistPlace>
-              <Button size='lg' className='shadow-lg hover:shadow-xl transition-all border border-black ' >
-                <PlusCircle className='mr-2 h-5 w-5' />
-                Add Nearest Place
-              </Button>
+          <PersistPlace Refetch={refetch}>
+            <Button size='lg' className='shadow-lg hover:shadow-xl transition-all border border-black '>
+              <PlusCircle className='mr-2 h-5 w-5' />
+              Add Nearest Place
+            </Button>
           </PersistPlace>
         </div>
         <div className='rounded-lg border bg-card'>

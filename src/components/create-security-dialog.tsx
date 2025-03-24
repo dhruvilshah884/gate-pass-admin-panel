@@ -12,7 +12,7 @@ import * as Yup from 'yup'
 import { postSecurity, fetchSecurityById, updateSecurity } from '@/api-handler/security'
 import { ISecurity } from '@/interface/security'
 
-export function PersistSecurity({ children, id }: { children: React.ReactNode; id?: string }) {
+export function PersistSecurity({ children, id, Refetch }: { children: React.ReactNode; id?: string; Refetch?: any }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const editSecurityId = id
@@ -20,6 +20,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
   const { mutate: securityPost, isLoading } = useMutation((data: ISecurity) => postSecurity(data), {
     onSuccess: () => {
       setOpen(false)
+      Refetch()
     },
     onError: error => {
       alert(error)
@@ -87,6 +88,7 @@ export function PersistSecurity({ children, id }: { children: React.ReactNode; i
   const { mutate: securityPut } = useMutation((data: ISecurity) => updateSecurity(editSecurityId as string, data), {
     onSuccess: () => {
       setOpen(false)
+      Refetch()
     },
     onError: error => {
       alert(error)

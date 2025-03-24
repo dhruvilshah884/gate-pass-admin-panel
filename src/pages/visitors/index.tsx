@@ -14,6 +14,7 @@ import { useQuery } from 'react-query'
 import { fetchVisitors } from '@/api-handler/visitors'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState } from 'react'
+import ScreenLoading from '@/components/ScreenLoading'
 
 const statusStyles = {
   pending: {
@@ -44,15 +45,15 @@ export default function VisitorsPage() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
-  const { data: visitorsList, refetch } = useQuery(
-    ['visitorsList', page, pageSize, q],
-    () => fetchVisitors({ page, pageSize, q }),
-    {
-      onError: error => {
-        console.error('Error fetching residents:', error)
-      }
+  const {
+    data: visitorsList,
+    refetch,
+    isLoading
+  } = useQuery(['visitorsList', page, pageSize, q], () => fetchVisitors({ page, pageSize, q }), {
+    onError: error => {
+      console.error('Error fetching residents:', error)
     }
-  )
+  })
 
   const visitorsData = visitorsList?.data?.data?.result
   const totalVisitors = visitorsList?.data?.data || 0
@@ -60,6 +61,10 @@ export default function VisitorsPage() {
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
   const totalPages = Math.ceil(count / pageSize)
+
+  if (isLoading) {
+    return <ScreenLoading />
+  }
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>

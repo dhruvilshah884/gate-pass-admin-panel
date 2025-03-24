@@ -11,8 +11,8 @@ const NearestSchema: Schema = new Schema({
   address: { type: String, required: true },
   mobileNumber: { type: String, required: true },
   openTime: { type: String, required: true },
-  closeTime: { type: String, required: true },
+  closeTime: { type: String, required: false },
   navigaton: { type: String, required: true },
-  distance: { type: String, required: true },
+  distance: { type: String, required: true }
 })
 export const Place = mongoose.models.place || mongoose.model<INearestPlace & Document>('place', NearestSchema)

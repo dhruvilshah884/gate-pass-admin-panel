@@ -9,6 +9,7 @@ import { useMutation, useQuery } from 'react-query'
 import { deleteResidency, fetchResidencies } from '@/api-handler/residency'
 import DashboardLayout from '@/layout/DashboardLayout'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import ScreenLoading from '@/components/ScreenLoading'
 
 export default function ResidencyPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,15 +18,16 @@ export default function ResidencyPage() {
   const pageSize = 10
   const [q, setQ] = useState('')
 
-  const { data: residenceList, refetch } = useQuery(
-    ['residenceList', page, pageSize, q],
-    () => fetchResidencies({ page, pageSize, q }),
-    {
-      onError: error => {
-        console.error('Error fetching residents:', error)
-      }
+  const {
+    data: residenceList,
+    refetch,
+    isLoading
+  } = useQuery(['residenceList', page, pageSize, q], () => fetchResidencies({ page, pageSize, q }), {
+    onError: error => {
+      console.error('Error fetching residents:', error)
     }
-  )
+  })
+
   const { mutate: handlerDelete } = useMutation((id: string) => deleteResidency(id), {
     onSuccess: () => {
       console.log('Residence deleted successfully')
@@ -40,7 +42,9 @@ export default function ResidencyPage() {
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
   const totalPages = Math.ceil(count / pageSize)
-
+  if (isLoading) {
+    return <ScreenLoading />
+  }
   return (
     <div className='space-y-6 '>
       <div className='flex items-center justify-between'>

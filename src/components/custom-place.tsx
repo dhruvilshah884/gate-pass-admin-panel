@@ -12,13 +12,14 @@ import * as Yup from 'yup'
 import { fetchPlaceById, postPlace, updatePlace } from '@/api-handler/place'
 import { INearestPlace } from '@/interface/nearestPlace'
 
-export function PersistPlace({ children, id }: { children: React.ReactNode; id?: string }) {
+export function PersistPlace({ children, id, Refetch }: { children: React.ReactNode; id?: string; Refetch?: any }) {
   const [open, setOpen] = useState(false)
   const editPlaceId = id
 
   const { mutate: placePost, isLoading } = useMutation((data: INearestPlace) => postPlace(data), {
     onSuccess: data => {
       setOpen(false)
+      Refetch()
     },
     onError: error => {
       alert(error)
@@ -29,7 +30,7 @@ export function PersistPlace({ children, id }: { children: React.ReactNode; id?:
       initialValues: {
         categoryName: '',
         name: '',
-        distance: "",
+        distance: '',
         address: '',
         openTime: '',
         closeTime: '',
@@ -42,7 +43,7 @@ export function PersistPlace({ children, id }: { children: React.ReactNode; id?:
         distance: Yup.string().required('Distance is required'),
         address: Yup.string().required('Address is required'),
         openTime: Yup.string().required('Open Time is required'),
-        closeTime: Yup.string().required('Close Time is required'),
+        closeTime: Yup.string().optional(),
         navigaton: Yup.string().required('Navigaton is required'),
         mobileNumber: Yup.string().required('Mobile Number is required')
       }),
@@ -96,6 +97,7 @@ export function PersistPlace({ children, id }: { children: React.ReactNode; id?:
   const { mutate: placePut } = useMutation((data: INearestPlace) => updatePlace(editPlaceId as string, data), {
     onSuccess: data => {
       setOpen(false)
+      Refetch()
     },
     onError: error => {
       alert(error)
@@ -134,9 +136,7 @@ export function PersistPlace({ children, id }: { children: React.ReactNode; id?:
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.name && touched.name && (
-                <div className='text-red-500 text-sm'>{errors.name as string}</div>
-              )}
+              {errors.name && touched.name && <div className='text-red-500 text-sm'>{errors.name as string}</div>}
             </div>
           </div>
 

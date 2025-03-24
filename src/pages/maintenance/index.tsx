@@ -8,21 +8,22 @@ import { useMutation, useQuery } from 'react-query'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { fetchMaintenance, postMaintenance } from '@/api-handler/maintence'
 import moment from 'moment'
+import ScreenLoading from '@/components/ScreenLoading'
 
 export default function Maintenance() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
   const [remainingTime, setRemainingTime] = useState<number | null>(null)
-  const { data: MaintenaceList, refetch } = useQuery(
-    ['maintenaceList', page, pageSize, q],
-    () => fetchMaintenance({ page, pageSize, q }),
-    {
-      onError: error => console.error('Error fetching Maintenance:', error)
-    }
-  )
+  const {
+    data: MaintenaceList,
+    refetch,
+    isLoading
+  } = useQuery(['maintenaceList', page, pageSize, q], () => fetchMaintenance({ page, pageSize, q }), {
+    onError: error => console.error('Error fetching Maintenance:', error)
+  })
 
-  const { mutate: mainteancePost, isLoading } = useMutation(() => postMaintenance(), {
+  const { mutate: mainteancePost, isLoading: isDelete } = useMutation(() => postMaintenance(), {
     onSuccess: () => {
       localStorage.setItem('lastSentTime', Date.now().toString())
       calculateRemainingTime()
@@ -73,6 +74,14 @@ export default function Maintenance() {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`
   }
 
+  if (isLoading) {
+    return <ScreenLoading />
+  }
+
+  if (isDelete) {
+    return <ScreenLoading />
+  }
+
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
@@ -88,18 +97,19 @@ export default function Maintenance() {
               refetch()
             }}
             className='w-[60%]'
-          /><Button
-          variant='outline'
-          size='default'
-          onClick={() => mainteancePost()}
-          disabled={isLoading || remainingTime !== null}
-        >
-          {remainingTime !== null
-            ? `Disabled: ${formatTime(remainingTime)}`
-            : isLoading
-            ? 'Sending...'
-            : 'Send All Mails'}
-        </Button>
+          />
+          <Button
+            variant='outline'
+            size='default'
+            onClick={() => mainteancePost()}
+            disabled={isLoading || remainingTime !== null}
+          >
+            {remainingTime !== null
+              ? `Disabled: ${formatTime(remainingTime)}`
+              : isLoading
+              ? 'Sending...'
+              : 'Send All Mails'}
+          </Button>
         </div>
         <div className='rounded-lg border bg-card'>
           <Table>
