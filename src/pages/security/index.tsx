@@ -13,21 +13,22 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import { useState } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Input } from '@/components/ui/input'
+import ScreenLoading from '@/components/ScreenLoading'
 
 export default function SecurityPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
-  const { data: securityList, refetch } = useQuery(
-    ['securityList', page, pageSize, q],
-    () => fetchSecurity({ page, pageSize, q }),
-    {
-      onError: error => {
-        console.error('Error fetching residents:', error)
-      }
+  const {
+    data: securityList,
+    refetch,
+    isLoading
+  } = useQuery(['securityList', page, pageSize, q], () => fetchSecurity({ page, pageSize, q }), {
+    onError: error => {
+      console.error('Error fetching residents:', error)
     }
-  )
+  })
   const securityListData = securityList?.data?.data?.result
   const count = securityList?.data?.data?.total || 0
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
@@ -43,6 +44,9 @@ export default function SecurityPage() {
       console.error('Error deleting Security:', error)
     }
   })
+  if (isLoading) {
+    return <ScreenLoading />
+  }
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div className='flex items-center justify-between'>
@@ -50,13 +54,11 @@ export default function SecurityPage() {
           <h1 className='text-3xl font-bold'>Security Management</h1>
           <p className='text-muted-foreground mt-2'>Manage security staff and their schedules</p>
         </div>
-        <PersistSecurity>
-          <div>
-            <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
-              <PlusCircle className='mr-2 h-5 w-5' />
-              Add Security
-            </Button>
-          </div>
+        <PersistSecurity Refetch={refetch}>
+          <Button size='lg' className='shadow-lg hover:shadow-xl transition-all'>
+            <PlusCircle className='mr-2 h-5 w-5' />
+            Add Security
+          </Button>
         </PersistSecurity>
       </div>
       <div className='flex items-center '>
