@@ -73,7 +73,7 @@ export function LoginScreen({ onLogin, onSignup }: LoginScreenProps) {
 
       <div className='p-6 text-center border-t border-gray-200 white:border-gray-800'>
         <p className='text-sm text-gray-500 white:text-gray-400'>
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Button variant='link' className='p-0 h-auto' onClick={onSignup}>
             Sign up
           </Button>

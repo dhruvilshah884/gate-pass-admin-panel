@@ -31,7 +31,7 @@ export function SecurityHomeScreen({ onNavigate }: SecurityHomeScreenProps) {
           </div>
         </div>
 
-        <h2 className='text-md font-semibold mb-3'>Today's Visitors</h2>
+        <h2 className='text-md font-semibold mb-3'>Today&apos;s Visitors</h2>
         <div className='space-y-4'>
           {[1, 2, 3, 4].map(item => (
             <div
