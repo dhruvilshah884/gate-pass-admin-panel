@@ -74,10 +74,6 @@ export default function Maintenance() {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`
   }
 
-  if (isLoading) {
-    return <ScreenLoading />
-  }
-
   if (isDelete) {
     return <ScreenLoading />
   }

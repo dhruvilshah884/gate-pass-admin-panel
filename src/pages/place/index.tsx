@@ -44,10 +44,6 @@ export default function PlacePage() {
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
   const totalPages = Math.ceil(count / pageSize)
 
-  if (isLoading) {
-    return <ScreenLoading />
-  }
-
   return (
     <div className='space-y-6 '>
       <div className='flex items-center justify-between'>
