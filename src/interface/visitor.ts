@@ -15,5 +15,8 @@ export interface IVisitor extends CommonModal {
   emergencyFlag: boolean
   residance: IResidance
   security: ISecurity
+  age?:number
+  gender?: "MALE" | "FEMALE"
+  address?: string
   flar: IFlat | string
 }

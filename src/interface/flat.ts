@@ -7,4 +7,5 @@ export interface IFlat extends CommonModal {
   flatName: string
   fullAddress: string
   maintenance: number
+  images: string[]
 }

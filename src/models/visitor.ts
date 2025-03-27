@@ -17,6 +17,9 @@ const VisitorSchema: Schema = new Schema({
   },
   emergencyFlag: { type: Boolean, default: false },
   residance: { type: Schema.Types.ObjectId, ref: 'Residance', required: true },
+  age: { type: Number },
+  gender: { type: String, enum: ['MALE', 'FEMALE'] },
+  address: { type: String },
   security: { type: Schema.Types.ObjectId, ref: 'Security', required: true },
   flat: { type: Schema.Types.ObjectId, ref: 'Flat', required: true }
 })
