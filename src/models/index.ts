@@ -11,6 +11,9 @@ import { Maintenance } from './maintenance.modal'
 import { Complaint } from './complaint.modal'
 import { QrCode } from './qrCode.modal'
 import { Place } from './nearest.modal'
+import { Group } from './group.modal'
+import { Message } from './message.modal'
+
 export const models = {
   Attendance,
   Wifi,
@@ -24,5 +27,7 @@ export const models = {
   Maintenance,
   Complaint,
   QrCode,
-  Place
+  Place,
+  Group,
+  Message
 }
