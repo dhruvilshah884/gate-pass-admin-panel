@@ -3,13 +3,13 @@ import { motion } from 'framer-motion'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, Check, X, ChevronLeft, ChevronRight } from 'lucide-react'
-import moment from 'moment'
 import { useQuery } from 'react-query'
 import { fetchWifi } from '@/api-handler/wifi'
 import DashboardLayout from '@/layout/DashboardLayout'
 import { useState, useEffect } from 'react'
+import ScreenLoading from '@/components/ScreenLoading'
 
-const statusStyles:any = {
+const statusStyles: any = {
   pending: {
     badge: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     icon: AlertTriangle
@@ -28,7 +28,11 @@ export default function Wifi() {
   const [page, setPage] = useState(1)
   const pageSize = 10
 
-  const { data: wifiList, refetch } = useQuery(['wifiList', page, pageSize], () => fetchWifi({ page, pageSize }), {
+  const {
+    data: wifiList,
+    refetch,
+    isLoading
+  } = useQuery(['wifiList', page, pageSize], () => fetchWifi({ page, pageSize }), {
     onError: error => {
       console.error('Error fetching wifi credentials:', error)
     }
@@ -43,7 +47,7 @@ export default function Wifi() {
 
   useEffect(() => {
     refetch()
-  }, [page , refetch])
+  }, [page, refetch])
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
@@ -63,23 +67,37 @@ export default function Wifi() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {wifiData.map((wifi:any, index:any) => {
-              const StatusIcon = statusStyles[wifi.status]?.icon || X
-              return (
-                <motion.tr
-                  key={wifi.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className='group hover:bg-muted/50'
-                >
-                  <TableCell>{wifi.residance?.flatNo || 'N/A'}</TableCell>
-                  <TableCell>{wifi.residance?.name || 'N/A'}</TableCell>
-                  <TableCell>{wifi.wifiName}</TableCell>
-                  <TableCell>{wifi.wifiCredentials}</TableCell>
-                </motion.tr>
-              )
-            })}
+            {isLoading ? (
+              <tr>
+                <td colSpan={4} className='text-center py-4 text-gray-500'>
+                  <ScreenLoading />{' '}
+                </td>
+              </tr>
+            ) : wifiData.length === 0 ? (
+              <tr>
+                <td colSpan={4} className='text-center py-4 text-gray-500'>
+                  No records found
+                </td>
+              </tr>
+            ) : (
+              wifiData.map((wifi: any, index: any) => {
+                const StatusIcon = statusStyles[wifi.status]?.icon || X
+                return (
+                  <motion.tr
+                    key={wifi.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className='group hover:bg-muted/50'
+                  >
+                    <TableCell>{wifi.residance?.flatNo || 'N/A'}</TableCell>
+                    <TableCell>{wifi.residance?.name || 'N/A'}</TableCell>
+                    <TableCell>{wifi.wifiName}</TableCell>
+                    <TableCell>{wifi.wifiCredentials}</TableCell>
+                  </motion.tr>
+                )
+              })
+            )}
           </TableBody>
         </Table>
       </div>

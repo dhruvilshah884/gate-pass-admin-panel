@@ -122,24 +122,40 @@ export default function Maintenance() {
             </TableHeader>
             <TableBody>
               <AnimatePresence>
-                {maintenanceData?.map((maintenance: any, index: any) => (
-                  <motion.tr
-                    key={maintenance.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
-                    className='group hover:bg-muted/50'
-                  >
-                    <TableCell>{maintenance.residance.name}</TableCell>
-                    <TableCell>{maintenance.amount}</TableCell>
-                    <TableCell>{maintenance.paymentMode || 'N/A'}</TableCell>
-                    <TableCell>{moment(maintenance.paymentDate).format('DD-MM-YYYY')}</TableCell>
-                    <TableCell>{maintenance.paymentProof || 'N/A'}</TableCell>
-                    <TableCell>{maintenance.paymentMonth || 'N/A'}</TableCell>
-                    <TableCell>{maintenance.status ? 'Success' : 'Pending'}</TableCell>
-                  </motion.tr>
-                ))}
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={7} className='p-6 text-center'>
+                      <div className='flex justify-center items-center h-32'>
+                        <ScreenLoading />
+                      </div>
+                    </td>
+                  </tr>
+                ) : maintenanceData?.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className='text-center p-4'>
+                      No maintenance records found.
+                    </td>
+                  </tr>
+                ) : (
+                  maintenanceData.map((maintenance: any, index: any) => (
+                    <motion.tr
+                      key={maintenance.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ delay: index * 0.1 }}
+                      className='group hover:bg-muted/50'
+                    >
+                      <TableCell>{maintenance.residance.name}</TableCell>
+                      <TableCell>{maintenance.amount}</TableCell>
+                      <TableCell>{maintenance.paymentMode || 'N/A'}</TableCell>
+                      <TableCell>{moment(maintenance.paymentDate).format('DD-MM-YYYY')}</TableCell>
+                      <TableCell>{maintenance.paymentProof || 'N/A'}</TableCell>
+                      <TableCell>{maintenance.paymentMonth || 'N/A'}</TableCell>
+                      <TableCell>{maintenance.status ? 'Success' : 'Pending'}</TableCell>
+                    </motion.tr>
+                  ))
+                )}
               </AnimatePresence>
             </TableBody>
           </Table>

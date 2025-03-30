@@ -51,10 +51,6 @@ export default function Complain() {
     refetch()
   }, [page, refetch])
 
-  if (isLoading) {
-    return <ScreenLoading />
-  }
-
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-6'>
       <div>
@@ -72,33 +68,47 @@ export default function Complain() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {complainsData.map((complaint: any, index: any) => {
-              const StatusIcon = statusStyles[complaint.status].icon
-              return (
-                <motion.tr
-                  key={complaint.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className='group hover:bg-muted/50'
-                >
-                  <TableCell>{complaint.residance.name}</TableCell>
-                  <TableCell>{complaint.complaint}</TableCell>
-                  <TableCell>{moment(complaint.date).format('MM/DD/YYYY')}</TableCell>
-                  <TableCell className='flex items-center'>
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium shadow-md transition-all
-      ${statusStyles[complaint.status].badge}`}
-                    >
-                      <StatusIcon className='h-4 w-4' style={{ color: statusStyles[complaint.status].iconColor }} />
-                      {complaint.status}
-                    </motion.span>
-                  </TableCell>
-                </motion.tr>
-              )
-            })}
+            {isLoading ? (
+              <tr>
+                <td colSpan={4} className='text-center py-4 text-gray-500'>
+                  <ScreenLoading />
+                </td>
+              </tr>
+            ) : complainsData.length === 0 ? (
+              <tr>
+                <td colSpan={4} className='text-center py-4 text-gray-500'>
+                  No records found
+                </td>
+              </tr>
+            ) : (
+              complainsData.map((complaint: any, index: any) => {
+                const StatusIcon = statusStyles[complaint.status].icon
+                return (
+                  <motion.tr
+                    key={complaint.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className='group hover:bg-muted/50'
+                  >
+                    <TableCell>{complaint.residance.name}</TableCell>
+                    <TableCell>{complaint.complaint}</TableCell>
+                    <TableCell>{moment(complaint.date).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell className='flex items-center'>
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium shadow-md transition-all
+    ${statusStyles[complaint.status].badge}`}
+                      >
+                        <StatusIcon className='h-4 w-4' style={{ color: statusStyles[complaint.status].iconColor }} />
+                        {complaint.status}
+                      </motion.span>
+                    </TableCell>
+                  </motion.tr>
+                )
+              })
+            )}
           </TableBody>
         </Table>
       </div>

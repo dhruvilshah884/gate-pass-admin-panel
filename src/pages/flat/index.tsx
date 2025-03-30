@@ -13,10 +13,13 @@ import { fetchFlats, deleteFlat } from '@/api-handler/flat'
 import { PersistFlat } from '@/components/custom-flat'
 
 export default function FlatPage() {
-  const [searchTerm, setSearchTerm] = useState('')
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
-  const { data: flatList, refetch } = useQuery(['flatList'], () => fetchFlats(), {
+  const {
+    data: flatList,
+    refetch,
+    isLoading
+  } = useQuery(['flatList'], () => fetchFlats(), {
     onError: error => {
       console.error('Error fetching residents:', error)
     }

@@ -117,7 +117,11 @@ export default function Dashboard() {
     }
   ]
   if (isLoading) {
-    return <ScreenLoading />
+    return (
+      <div className='flex items-center justify-center h-screen'>
+        <ScreenLoading />
+      </div>
+    )
   }
   return (
     <div className='w-full space-y-8  mx-auto min-h-screen'>
@@ -129,19 +133,6 @@ export default function Dashboard() {
             </h1>
             <p className='text-muted-foreground mt-2'>Welcome back to your admin dashboard</p>
           </div>
-          <Link href='/complaint'>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full cursor-pointer shadow-md'
-            >
-              <Bell className='h-4 w-4' />
-              <span className='font-medium'>Notifications</span>
-              <div className='bg-white text-indigo-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold'>
-                {notification}
-              </div>
-            </motion.div>
-          </Link>
         </motion.div>
         {isLoading ? (
           <div className='grid gap-6 md:grid-cols-3'>
