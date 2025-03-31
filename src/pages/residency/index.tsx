@@ -10,6 +10,7 @@ import { deleteResidency, fetchResidencies } from '@/api-handler/residency'
 import DashboardLayout from '@/layout/DashboardLayout'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import ScreenLoading from '@/components/ScreenLoading'
+import { PersistResident } from '../../components/persistResident'
 
 export default function ResidencyPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -83,7 +84,7 @@ export default function ResidencyPage() {
                 ) : residentsData?.length === 0 ? (
                   <tr>
                     <td colSpan={6} className='text-center p-4'>
-                      No residents found.
+                      No resident found.
                     </td>
                   </tr>
                 ) : (
@@ -100,11 +101,13 @@ export default function ResidencyPage() {
                       <TableCell>{resident.flatNo}</TableCell>
                       <TableCell>{resident.email}</TableCell>
                       <TableCell>{resident.phoneNumber1}</TableCell>
-                      <TableCell>{`${resident.flat.fullAddress}`}</TableCell>
+                      <TableCell>{resident.flat.fullAddress}</TableCell>
                       <TableCell className='text-right gap-2'>
-                        <Button variant='ghost' size='sm' className='mr-2'>
-                          <Edit className='mr-2 h-4 w-4' />
-                        </Button>
+                        <PersistResident id={resident._id}>
+                          <Button variant='ghost' size='sm' className='mr-2'>
+                            <Edit className='mr-2 h-4 w-4' />
+                          </Button>
+                        </PersistResident>
                         <AlertDialog.Root>
                           <AlertDialog.Trigger asChild>
                             <Button variant='ghost' size='sm' onClick={() => setDeleteId(resident?._id)}>
@@ -117,7 +120,7 @@ export default function ResidencyPage() {
                               <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
                               <AlertDialog.Description className='text-sm text-gray-600'>
                                 Are you sure you want to delete this residence{' '}
-                                <span className='font-bold text-black'>{resident.name}</span>?
+                                <span className='font-bold text-black'>{resident.name}</span> ?
                               </AlertDialog.Description>
                               <div className='mt-4 flex justify-end gap-2'>
                                 <AlertDialog.Cancel asChild>
