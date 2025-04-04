@@ -14,7 +14,6 @@ import { PersistPlace } from '@/components/custom-place'
 import ScreenLoading from '@/components/ScreenLoading'
 
 export default function PlacePage() {
-  const [searchTerm, setSearchTerm] = useState('')
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const pageSize = 10
@@ -38,7 +37,7 @@ export default function PlacePage() {
       console.error('Error deleting Place:', error)
     }
   })
-  const placesData = placeList?.data?.data?.result
+  const placesData = placeList?.data?.data?.result || []
   const count = placeList?.data?.data?.total || 0
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePreviousPage = () => setPage(prevPage => Math.max(prevPage - 1, 1))
@@ -83,64 +82,79 @@ export default function PlacePage() {
             </TableHeader>
             <TableBody>
               <AnimatePresence>
-                {placesData?.map((place: any, index: any) => (
-                  <motion.tr
-                    key={place.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
-                    className='group hover:bg-muted/50'
-                  >
-                    <TableCell>{place.name}</TableCell>
-                    <TableCell className='font-medium'>{place.categoryName}</TableCell>
-                    <TableCell>{place.address}</TableCell>
-                    <TableCell>{place.mobileNumber}</TableCell>
-                    <TableCell>
-                      {place.openTime} - {place.closeTime}
-                    </TableCell>{' '}
-                    <TableCell>{place.navigaton}</TableCell>
-                    <TableCell>{place.distance}</TableCell>
-                    <TableCell className='text-right gap-2'>
-                      <PersistPlace id={place?._id}>
-                        <Button variant='ghost' size='sm' className='mr-2'>
-                          <Edit className='mr-2 h-4 w-4' />
-                        </Button>
-                      </PersistPlace>
-                      <AlertDialog.Root>
-                        <AlertDialog.Trigger asChild>
-                          <Button variant='ghost' size='sm' onClick={() => setDeleteId(place?._id)}>
-                            <Trash className='mr-2 h-4 w-4 text-red-500' />
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={8} className='text-center p-4'>
+                      <ScreenLoading />
+                    </td>
+                  </tr>
+                ) : placesData?.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className='text-center p-4 text-muted-foreground'>
+                      No places found.
+                    </td>
+                  </tr>
+                ) : (
+                  placesData?.map((place: any, index: any) => (
+                    <motion.tr
+                      key={place.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ delay: index * 0.1 }}
+                      className='group hover:bg-muted/50'
+                    >
+                      <TableCell>{place.name}</TableCell>
+                      <TableCell className='font-medium'>{place.categoryName}</TableCell>
+                      <TableCell>{place.address}</TableCell>
+                      <TableCell>{place.mobileNumber}</TableCell>
+                      <TableCell>
+                        {place.openTime} - {place.closeTime}
+                      </TableCell>{' '}
+                      <TableCell>{place.navigaton}</TableCell>
+                      <TableCell>{place.distance}</TableCell>
+                      <TableCell className='text-right gap-2'>
+                        <PersistPlace id={place?._id}>
+                          <Button variant='ghost' size='sm' className='mr-2'>
+                            <Edit className='mr-2 h-4 w-4' />
                           </Button>
-                        </AlertDialog.Trigger>
-                        <AlertDialog.Portal>
-                          <AlertDialog.Overlay className='fixed inset-0 bg-black/50' />
-                          <AlertDialog.Content className='fixed left-1/2 top-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-lg rounded-lg'>
-                            <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
-                            <AlertDialog.Description className='text-sm text-gray-600'>
-                              Are you sure you want to delete this place? This action cannot be undo.
-                            </AlertDialog.Description>
-                            <div className='mt-4 flex justify-end gap-2'>
-                              <AlertDialog.Cancel asChild>
-                                <Button variant='outline'>Cancel</Button>
-                              </AlertDialog.Cancel>
-                              <AlertDialog.Action
-                                asChild
-                                onClick={() => {
-                                  if (deleteId) {
-                                    handlerDelete(deleteId)
-                                  }
-                                }}
-                              >
-                                <Button variant='outline'>Delete</Button>
-                              </AlertDialog.Action>
-                            </div>
-                          </AlertDialog.Content>
-                        </AlertDialog.Portal>
-                      </AlertDialog.Root>
-                    </TableCell>
-                  </motion.tr>
-                ))}
+                        </PersistPlace>
+                        <AlertDialog.Root>
+                          <AlertDialog.Trigger asChild>
+                            <Button variant='ghost' size='sm' onClick={() => setDeleteId(place?._id)}>
+                              <Trash className='mr-2 h-4 w-4 text-red-500' />
+                            </Button>
+                          </AlertDialog.Trigger>
+                          <AlertDialog.Portal>
+                            <AlertDialog.Overlay className='fixed inset-0 bg-black/50' />
+                            <AlertDialog.Content className='fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-lg rounded-lg'>
+                              <AlertDialog.Title className='text-lg font-bold'>Confirm Deletion</AlertDialog.Title>
+                              <AlertDialog.Description className='text-sm text-gray-600'>
+                                Are you sure you want to delete this place{' '}
+                                <span className='font-bold text-black'>{place.name}</span>?
+                              </AlertDialog.Description>
+                              <div className='mt-4 flex justify-end gap-2'>
+                                <AlertDialog.Cancel asChild>
+                                  <Button variant='outline'>Cancel</Button>
+                                </AlertDialog.Cancel>
+                                <AlertDialog.Action
+                                  asChild
+                                  onClick={() => {
+                                    if (deleteId) {
+                                      handlerDelete(deleteId)
+                                    }
+                                  }}
+                                >
+                                  <Button variant='outline'>Delete</Button>
+                                </AlertDialog.Action>
+                              </div>
+                            </AlertDialog.Content>
+                          </AlertDialog.Portal>
+                        </AlertDialog.Root>
+                      </TableCell>
+                    </motion.tr>
+                  ))
+                )}
               </AnimatePresence>
             </TableBody>
           </Table>

@@ -138,87 +138,103 @@ export default function VisitorsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {visitorsData?.map((visitor: any, index: number) => {
-              const StatusIcon = statusStyles[visitor.status as keyof typeof statusStyles].icon
-              const SosIcon = sos[visitor.emergencyFlag as keyof typeof sos].icon
-              return (
-                <motion.tr
-                  key={visitor.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className='group hover:bg-muted/50'
-                >
-                  <TableCell>
-                    <div className='flex items-center gap-3'>
-                      <Avatar className='h-9 w-9'>
-                        <AvatarImage src={`/placeholder.svg?height=36&width=36`} alt={visitor.name} />
-                        <AvatarFallback>{visitor.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className='font-medium'>{visitor.name}</div>
-                        <div className='text-sm text-muted-foreground'>{visitor.phone}</div>
+            {isLoading ? (
+              <tr>
+                <td colSpan={11} className='p-6 text-center'>
+                  <div className='flex justify-center items-center h-32'>
+                    <ScreenLoading />
+                  </div>
+                </td>
+              </tr>
+            ) : visitorsData?.length === 0 ? (
+              <tr>
+                <td colSpan={11} className='text-center py-4 text-gray-500'>
+                  No visitor records found
+                </td>
+              </tr>
+            ) : (
+              visitorsData?.map((visitor: any, index: number) => {
+                const StatusIcon = statusStyles[visitor.status as keyof typeof statusStyles].icon
+                const SosIcon = sos[visitor.emergencyFlag as keyof typeof sos].icon
+                return (
+                  <motion.tr
+                    key={visitor.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className='group hover:bg-muted/50'
+                  >
+                    <TableCell>
+                      <div className='flex items-center gap-3'>
+                        <Avatar className='h-9 w-9'>
+                          <AvatarImage src={`/placeholder.svg?height=36&width=36`} alt={visitor.name} />
+                          <AvatarFallback>{visitor.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className='font-medium'>{visitor.name}</div>
+                          <div className='text-sm text-muted-foreground'>{visitor.phone}</div>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{visitor.vehicleNumber}</TableCell>
-                  <TableCell>{moment(visitor?.entryTime).format('MM/DD/YYYY')}</TableCell>
-                  <TableCell>{moment(visitor?.exitTime).format('MM/DD/YYYY')}</TableCell>
-                  <TableCell>
-                    <div>
-                      <div className='font-medium'>{visitor.residenceName}</div>
-                      <div className='text-sm text-muted-foreground'>{visitor.residance?.flatNo}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className='font-medium'>{visitor.residenceName}</div>
-                      <div className='text-sm text-muted-foreground'>{visitor.residance?.name}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{visitor.purpose}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant='outline'
-                      className={statusStyles[visitor.status as keyof typeof statusStyles].badge}
-                    >
-                      <StatusIcon className='mr-1 h-3 w-3' />
-                      {visitor.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant='outline' className={sos[visitor.emergencyFlag as keyof typeof sos].badge}>
-                      <SosIcon className='mr-1 h-3 w-3' />
-                      {visitor.emergencyFlag ? 'Yes' : 'No'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className='text-right'>
-                    <div className='flex justify-end gap-2'>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        className='opacity-0 group-hover:opacity-100 transition-opacity'
-                        onClick={() => {
-                          /* Handle approve */
-                        }}
+                    </TableCell>
+                    <TableCell>{visitor.vehicleNumber}</TableCell>
+                    <TableCell>{moment(visitor?.entryTime).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell>{moment(visitor?.exitTime).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div className='font-medium'>{visitor.residenceName}</div>
+                        <div className='text-sm text-muted-foreground'>{visitor.residance?.flatNo}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className='font-medium'>{visitor.residenceName}</div>
+                        <div className='text-sm text-muted-foreground'>{visitor.residance?.name}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{visitor.purpose}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant='outline'
+                        className={statusStyles[visitor.status as keyof typeof statusStyles].badge}
                       >
-                        <Check className='mr-1 h-4 w-4' /> Approve
-                      </Button>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        className='opacity-0 group-hover:opacity-100 transition-opacity text-red-600'
-                        onClick={() => {
-                          /* Handle deny */
-                        }}
-                      >
-                        <X className='mr-1 h-4 w-4' /> Deny
-                      </Button>
-                    </div>
-                  </TableCell>
-                </motion.tr>
-              )
-            })}
+                        <StatusIcon className='mr-1 h-3 w-3' />
+                        {visitor.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant='outline' className={sos[visitor.emergencyFlag as keyof typeof sos].badge}>
+                        <SosIcon className='mr-1 h-3 w-3' />
+                        {visitor.emergencyFlag ? 'Yes' : 'No'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className='text-right'>
+                      <div className='flex justify-end gap-2'>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          className='opacity-0 group-hover:opacity-100 transition-opacity'
+                          onClick={() => {
+                            /* Handle approve */
+                          }}
+                        >
+                          <Check className='mr-1 h-4 w-4' /> Approve
+                        </Button>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          className='opacity-0 group-hover:opacity-100 transition-opacity text-red-600'
+                          onClick={() => {
+                            /* Handle deny */
+                          }}
+                        >
+                          <X className='mr-1 h-4 w-4' /> Deny
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </motion.tr>
+                )
+              })
+            )}
           </TableBody>
         </Table>
       </div>{' '}
