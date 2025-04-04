@@ -88,15 +88,11 @@ export class VisitorService extends CurdOperation<IVisitor> {
     }
     if (visitorDetails.status === 'approved') {
       visitorDetails.entryTime = new Date()
-      const wifiDetails = await models.Wifi.findOne({ flat: visitorDetails.flat })
-      if (!wifiDetails) {
-        throw new Error('Wifi details not found')
-      }
       if (visitorDetails.email) {
         await this.sendEmail(
           visitorDetails.email,
           'Your visit has been approved',
-          `Hello ${visitorDetails.name}, your visit has been approved. You may enter the premises now. Now You Can Access The Wifi ${wifiDetails.wifiName} and Password ${wifiDetails.wifiCredentials}`
+          `Hello ${visitorDetails.name}, your visit has been approved. You may enter the premises now.`
         )
       }
     }
