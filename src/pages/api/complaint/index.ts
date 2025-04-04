@@ -11,12 +11,12 @@ const service = new ComplaintService()
 export default nextConnect()
   .use(dbConnectMiddleware)
   // .use(authCheckMiddleware)
-  .post( authCheckMiddleware , async (req: NextApiRequestWithUser, res: NextApiResponse) => {
+  .post(authCheckMiddleware, async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
       const data = {
         ...req.body,
         residance: (req.user as IResidance)._id,
-        flat: (req.user as IResidance).flat,
+        flat: (req.user as IResidance).flat
       }
       const complaint = await service.create(data)
       res.status(201).json({ success: true, data: complaint })
@@ -36,12 +36,16 @@ export default nextConnect()
       const skip = (pageNumber - 1) * limit
 
       const searchFilter = q
-        ? { flat: req.user.flat, isDeleted: false, name: { $regex: q, $options: 'i' } }
+        ? { flat: req.user.flat, isDeleted: false, complaint: { $regex: q, $options: 'i' } }
         : { flat: req.user.flat, isDeleted: false }
 
       const totalComplaint = await models.Complaint.countDocuments(searchFilter)
 
-      const complaints = await models.Complaint.find(searchFilter).populate('residance').populate('flat').skip(skip).limit(limit)
+      const complaints = await models.Complaint.find(searchFilter)
+        .populate('residance')
+        .populate('flat')
+        .skip(skip)
+        .limit(limit)
 
       res.status(200).json({
         success: true,
