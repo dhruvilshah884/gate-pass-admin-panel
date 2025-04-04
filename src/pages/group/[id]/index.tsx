@@ -206,7 +206,7 @@ export default function GroupChatPage() {
     return (
       <div className='container mx-auto py-10 text-center'>
         <h2 className='text-2xl font-bold mb-4'>Group not found</h2>
-        <p className='mb-6'>The group you're looking for doesn't exist or you don't have access.</p>
+        <p className='mb-6'>The group you are looking for does not exist or you do not have access.</p>
         <Link href='/groups'>
           <Button>Back to Groups</Button>
         </Link>
