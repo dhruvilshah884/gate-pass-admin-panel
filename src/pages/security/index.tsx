@@ -10,7 +10,7 @@ import { useMutation, useQuery } from 'react-query'
 import { deleteSecurity, fetchSecurity } from '@/api-handler/security'
 import moment from 'moment'
 import DashboardLayout from '@/layout/DashboardLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Input } from '@/components/ui/input'
 import ScreenLoading from '@/components/ScreenLoading'
@@ -20,6 +20,11 @@ export default function SecurityPage() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
+
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Security'
+  }, [])
+
   const {
     data: securityList,
     refetch,

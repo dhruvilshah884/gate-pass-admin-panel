@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { adminLogin } from '@/api-handler/auth'
-
+import Image from 'next/image'
+import Icon from '../../../public/gate-pass-circle.png'
 export default function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,7 +16,11 @@ export default function LoginForm() {
   const [error, setError] = useState(null)
   const router = useRouter()
 
-  const handleSubmit = async (event:any) => {
+  useEffect(() => {
+    document.title = 'Gate Pass Admin || Login'
+  }, [])
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
     setIsLoading(true)
     setError(null)
@@ -29,7 +34,7 @@ export default function LoginForm() {
       } else {
         throw new Error(response.message || 'Invalid credentials')
       }
-    } catch (err:any) {
+    } catch (err: any) {
       setError(err.message)
       toast.error(err.message)
     } finally {
@@ -48,7 +53,8 @@ export default function LoginForm() {
     <div className='min-h-screen flex items-center justify-center bg-gray-50'>
       <div className='max-w-md w-full px-6'>
         <div className='text-center mb-8'>
-          <h1 className='text-3xl font-bold'>Admin Login</h1>
+          <Image src={Icon} alt='Logo' width={150} height={150} className='mx-auto' />
+          <h1 className='text-3xl font-bold m-4'>Admin Login</h1>
           <p className='text-muted-foreground mt-2'>Enter your credentials to access the admin panel</p>
         </div>
         <Card>

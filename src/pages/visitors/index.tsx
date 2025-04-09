@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useQuery } from 'react-query'
 import { fetchVisitors } from '@/api-handler/visitors'
 import DashboardLayout from '@/layout/DashboardLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ScreenLoading from '@/components/ScreenLoading'
 
 const statusStyles = {
@@ -45,6 +45,11 @@ export default function VisitorsPage() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
+
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Visitors'
+  }, [])
+
   const {
     data: visitorsList,
     refetch,

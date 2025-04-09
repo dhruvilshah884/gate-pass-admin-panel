@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,10 @@ export default function PlacePage() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
+
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Place'
+  }, [])
 
   const {
     data: placeList,

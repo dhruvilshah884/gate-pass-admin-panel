@@ -30,6 +30,10 @@ export default function Complain() {
   const [page, setPage] = useState(1)
   const pageSize = 10
 
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Complaint'
+  }, [])
+
   const {
     data: complainsList,
     refetch,

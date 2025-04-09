@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,9 @@ import { fetchFlats, deleteFlat } from '@/api-handler/flat'
 import { PersistFlat } from '@/components/custom-flat'
 
 export default function FlatPage() {
-  const [deleteId, setDeleteId] = useState<string | null>(null)
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Flat'
+  }, [])
 
   const {
     data: flatList,

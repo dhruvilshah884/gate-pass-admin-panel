@@ -15,6 +15,11 @@ export default function Maintenance() {
   const pageSize = 10
   const [q, setQ] = useState('')
   const [remainingTime, setRemainingTime] = useState<number | null>(null)
+
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Maintenance'
+  }, [])
+
   const {
     data: MaintenaceList,
     refetch,

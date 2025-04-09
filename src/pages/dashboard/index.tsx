@@ -7,6 +7,7 @@ import { fetchDashboard } from '@/api-handler/dashboard'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
 import ScreenLoading from '@/components/ScreenLoading'
+import { useEffect } from 'react'
 
 const container = {
   hidden: { opacity: 0 },
@@ -24,6 +25,9 @@ const item = {
 }
 
 export default function Dashboard() {
+  useEffect(() => {
+    document.title = 'Gate-Pass Admin || Dashboard'
+  }, [])
   const {
     data: dashboardData,
     isLoading,
@@ -125,7 +129,7 @@ export default function Dashboard() {
   }
   return (
     <div className='w-full space-y-8  mx-auto min-h-screen'>
-      <motion.div initial='hidden' animate='show' variants={container} className='space-y-8'>
+      <motion.div initial='hidden' animate='show' variants={container} className='space-y-4'>
         <motion.div variants={item} className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
           <div>
             <h1 className='text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
@@ -196,7 +200,7 @@ export default function Dashboard() {
           <motion.div variants={item}>
             <Card className='overflow-hidden border-0 shadow-lg bg-white white:bg-slate-800'>
               <div className='h-1.5 w-full bg-gradient-to-r from-blue-500 to-indigo-600'></div>
-              <CardHeader className='border-b border-slate-100 dark:border-slate-700'>
+              <CardHeader className='border-b border-slate-100 p-2 dark:border-slate-700'>
                 <div className='flex items-center justify-between'>
                   <CardTitle className='flex items-center gap-2'>
                     <div className='p-1.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-sm'>
@@ -220,7 +224,7 @@ export default function Dashboard() {
                     <motion.div
                       key={i}
                       variants={item}
-                      className='flex items-center gap-4 p-4 rounded-xl bg-white white:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:shadow-md transition-all duration-200'
+                      className='flex items-center gap-4 p-4 rounded-xl bg-white white:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:shadow-md transition-all duration-200 '
                       whileHover={{ x: 5 }}
                     >
                       <div className={`h-10 w-1 rounded-full bg-gradient-to-b ${activity.gradient}`} />
@@ -241,7 +245,7 @@ export default function Dashboard() {
           <motion.div variants={item}>
             <Card className='overflow-hidden border-0 shadow-lg h-full bg-white white:bg-slate-800'>
               <div className='h-1.5 w-full bg-gradient-to-r from-purple-500 to-pink-600'></div>
-              <CardHeader className='border-b border-slate-100 dark:border-slate-700'>
+              <CardHeader className='border-b border-slate-100 dark:border-slate-700 p-2'>
                 <CardTitle className='flex items-center gap-2'>
                   <div className='p-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 shadow-sm'>
                     <ArrowUpRight className='h-4 w-4 text-white' />
@@ -277,7 +281,7 @@ export default function Dashboard() {
         <motion.div variants={item}>
           <Card className='overflow-hidden border-0 shadow-lg bg-white white:bg-slate-800'>
             <div className='h-1.5 w-full bg-gradient-to-r from-emerald-500 to-green-600'></div>
-            <CardHeader className='border-b border-slate-100 dark:border-slate-700'>
+            <CardHeader className='border-b border-slate-100 dark:border-slate-700 p-2'>
               <CardTitle className='flex items-center gap-2'>
                 <div className='p-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 shadow-sm'>
                   <BarChart3 className='h-4 w-4 text-white' />
