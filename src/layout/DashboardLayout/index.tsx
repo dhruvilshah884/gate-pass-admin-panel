@@ -102,14 +102,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <span className='font-semibold'>Complaint</span>
             </Link>
 
-            <Link
-              href='/wifi'
-              className='flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-green-500 hover:text-white transition-all'
-            >
-              <WifiIcon className='h-5 w-5' />
-              <span className='font-semibold'>Wifi</span>
-            </Link>
-
             <Button
               variant='ghost'
               className='flex items-center justify-start text-red-500 w-full mt-6 hover:bg-red-100 transition-colors px-3 py-2 rounded-lg'
