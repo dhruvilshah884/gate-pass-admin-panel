@@ -5,6 +5,7 @@ export interface IFetchMaintenceParams {
   pageSize?: number
   page?: number
   q?: string
+  residanceName?: string
 }
 
 export const fetchMaintenance = async (params: IFetchMaintenceParams) => {

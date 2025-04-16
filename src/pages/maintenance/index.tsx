@@ -9,24 +9,39 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import { fetchMaintenance, postMaintenance } from '@/api-handler/maintence'
 import moment from 'moment'
 import ScreenLoading from '@/components/ScreenLoading'
+import { fetchResidencies } from '@/api-handler/residency'
 
 export default function Maintenance() {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [q, setQ] = useState('')
   const [remainingTime, setRemainingTime] = useState<number | null>(null)
+  const [residanceList, setResidanceList] = useState<any[]>([])
+  const [selectedResidance, setSelectedResidance] = useState<string>('')
 
   useEffect(() => {
     document.title = 'Gate-Pass Admin || Maintenance'
   }, [])
 
+  useEffect(() => {
+    fetchResidencies({ page: 1, pageSize: 1000, q: '' }).then(res => {
+      if (res.success) setResidanceList(res.data.data.result)
+    })
+  }, [])
+
+  console.log(residanceList, 'residanceList')
+
   const {
     data: MaintenaceList,
     refetch,
     isLoading
-  } = useQuery(['maintenaceList', page, pageSize, q], () => fetchMaintenance({ page, pageSize, q }), {
-    onError: error => console.error('Error fetching Maintenance:', error)
-  })
+  } = useQuery(
+    ['maintenaceList', page, pageSize, q, selectedResidance],
+    () => fetchMaintenance({ page, pageSize, q, residanceName: selectedResidance }),
+    {
+      onError: error => console.error('Error fetching Maintenance:', error)
+    }
+  )
 
   const { mutate: mainteancePost, isLoading: isDelete } = useMutation(() => postMaintenance(), {
     onSuccess: () => {
@@ -89,7 +104,7 @@ export default function Maintenance() {
         <h1 className='text-3xl font-bold'>Maintenance List</h1>
       </div>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between gap-4'>
           <Input
             placeholder='Search Maintenance...'
             value={q}
@@ -97,8 +112,24 @@ export default function Maintenance() {
               setQ(e.target.value)
               refetch()
             }}
-            className='w-[60%]'
+            className='w-[50%]'
           />
+          <select
+            className='border p-2 rounded-md'
+            value={selectedResidance}
+            onChange={e => {
+              setSelectedResidance(e.target.value)
+              setPage(1)
+              refetch()
+            }}
+          >
+            <option value=''>All Residences</option>
+            {residanceList.map(res => (
+              <option key={res._id} value={res.name}>
+                {res.name}
+              </option>
+            ))}
+          </select>
           <Button
             variant='outline'
             size='default'
@@ -112,6 +143,7 @@ export default function Maintenance() {
               : 'Send All Mails'}
           </Button>
         </div>
+
         <div className='rounded-lg border bg-card'>
           <Table>
             <TableHeader>

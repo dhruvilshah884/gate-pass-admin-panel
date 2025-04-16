@@ -23,23 +23,55 @@ export default nextConnect()
   })
   .get(authCheckMiddleware, async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const { page = 1, pageSize = 10, q = '' } = req.query
+      const { page = 1, pageSize = 10, q = '', residanceName = '' } = req.query
 
       const pageNumber = Number(page)
       const limit = Number(pageSize)
       const skip = (pageNumber - 1) * limit
 
-      const searchFilter = q
-        ? { flat: req.user.flat, isDeleted: false, name: { $regex: q, $options: 'i' } }
-        : { flat: req.user.flat, isDeleted: false }
+      const matchStage: any = {
+        isDeleted: false,
+        flat: req.user.flat
+      }
 
-      const totalMaintence = await models.Maintenance.countDocuments(searchFilter)
+      // Add search by maintenance name (if q provided)
+      if (q) {
+        matchStage.name = { $regex: q, $options: 'i' }
+      }
 
-      const maintence = await models.Maintenance.find(searchFilter)
-        .populate('flat')
-        .populate('residance')
-        .skip(skip)
-        .limit(limit)
+      const pipeline: any[] = [
+        {
+          $match: matchStage
+        },
+        {
+          $lookup: {
+            from: 'residances', // this must match the actual MongoDB collection name
+            localField: 'residance',
+            foreignField: '_id',
+            as: 'residance'
+          }
+        },
+        { $unwind: '$residance' }
+      ]
+
+      // Add filtering by residance name
+      if (residanceName) {
+        pipeline.push({
+          $match: {
+            'residance.name': { $regex: residanceName, $options: 'i' }
+          }
+        })
+      }
+
+      // Count total
+      const countPipeline = [...pipeline, { $count: 'total' }]
+      const totalResult = await models.Maintenance.aggregate(countPipeline)
+      const totalMaintence = totalResult[0]?.total || 0
+
+      // Add pagination
+      pipeline.push({ $skip: skip }, { $limit: limit })
+
+      const maintence = await models.Maintenance.aggregate(pipeline)
 
       res.status(200).json({
         success: true,
@@ -52,7 +84,7 @@ export default nextConnect()
         }
       })
     } catch (error: any) {
-      console.error('Error fetching maintence:', error)
+      console.error('Error fetching maintenance:', error)
       return res.status(error.status || 500).json({
         success: false,
         message: error.message || 'Internal server error.'
