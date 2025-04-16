@@ -43,7 +43,7 @@ export default function Maintenance() {
     }
   )
 
-  const { mutate: mainteancePost, isLoading: isDelete } = useMutation(() => postMaintenance(), {
+  const { mutate: mainteancePost } = useMutation(() => postMaintenance(), {
     onSuccess: () => {
       localStorage.setItem('lastSentTime', Date.now().toString())
       calculateRemainingTime()
@@ -94,45 +94,43 @@ export default function Maintenance() {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`
   }
 
-  if (isDelete) {
-    return <ScreenLoading />
-  }
-
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
         <h1 className='text-3xl font-bold'>Maintenance List</h1>
       </div>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className='space-y-4'>
-        <div className='flex items-center justify-between gap-4'>
-          <Input
-            placeholder='Search Maintenance...'
-            value={q}
-            onChange={e => {
-              setQ(e.target.value)
-              refetch()
-            }}
-            className='w-[50%]'
-          />
-          <select
-            className='border p-2 rounded-md'
-            value={selectedResidance}
-            onChange={e => {
-              setSelectedResidance(e.target.value)
-              setPage(1)
-              refetch()
-            }}
-          >
-            <option value=''>All Residences</option>
-            {residanceList.map(res => (
-              <option key={res._id} value={res.name}>
-                {res.name}
-              </option>
-            ))}
-          </select>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-4 w-[100%] md:w-[50%]'>
+            <Input
+              placeholder='Search Maintenance...'
+              value={q}
+              onChange={e => {
+                setQ(e.target.value)
+                refetch()
+              }}
+            />
+            <select
+              className='border p-2 rounded-md'
+              value={selectedResidance}
+              onChange={e => {
+                setSelectedResidance(e.target.value)
+                setPage(1)
+                refetch()
+              }}
+            >
+              <option value=''>All Residences</option>
+              {residanceList.map(res => (
+                <option key={res._id} value={res.name}>
+                  {res.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <Button
             variant='outline'
             size='default'
+            className='flex justify-end'
             onClick={() => mainteancePost()}
             disabled={isLoading || remainingTime !== null}
           >
