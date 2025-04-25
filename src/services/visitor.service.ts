@@ -41,8 +41,8 @@ export class VisitorService extends CurdOperation<IVisitor> {
 
     if (residence.email) {
       // Approval & Rejection API Links
-      const acceptUrl = `https://dhruvil-gate-pass.vercel.app/api/visitor/update-status?id=${visitor._id}&status=approved`
-      const rejectUrl = `https://dhruvil-gate-pass.vercel.app/api/visitor/update-status?id=${visitor._id}&status=denied`
+      const acceptUrl = `https://dhruvil-gate-pass.vercel.app/visitors/status?id=${visitor._id}&status=approved`
+      const rejectUrl = `https://dhruvil-gate-pass.vercel.app/visitor/status?id=${visitor._id}&status=denied`
 
       const emailHtml = `
         <body style="background-color: #f4f4f4; padding: 20px; font-family: Arial, sans-serif;">
