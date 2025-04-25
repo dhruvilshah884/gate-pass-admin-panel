@@ -16,7 +16,7 @@ const statusStyles: any = {
     badge: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     icon: AlertTriangle
   },
-  approved: {
+  Resolved: {
     badge: 'bg-green-50 text-green-700 border-green-200',
     icon: Check
   },
