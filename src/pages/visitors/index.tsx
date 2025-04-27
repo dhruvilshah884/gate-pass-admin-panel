@@ -136,10 +136,9 @@ export default function VisitorsPage() {
               <TableHead>Exit Time</TableHead>
               <TableHead>Flat No</TableHead>
               <TableHead>Residance Name</TableHead>
-              <TableHead>Purpose</TableHead>
+              {/* <TableHead>Purpose</TableHead> */}
               <TableHead>Status</TableHead>
               <TableHead>Sos</TableHead>
-              <TableHead className='text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -196,7 +195,7 @@ export default function VisitorsPage() {
                         <div className='text-sm text-muted-foreground'>{visitor.residance?.name}</div>
                       </div>
                     </TableCell>
-                    <TableCell>{visitor.purpose}</TableCell>
+                    {/* <TableCell>{visitor.purpose}</TableCell> */}
                     <TableCell>
                       <Badge
                         variant='outline'
@@ -211,30 +210,6 @@ export default function VisitorsPage() {
                         <SosIcon className='mr-1 h-3 w-3' />
                         {visitor.emergencyFlag ? 'Yes' : 'No'}
                       </Badge>
-                    </TableCell>
-                    <TableCell className='text-right'>
-                      <div className='flex justify-end gap-2'>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='opacity-0 group-hover:opacity-100 transition-opacity'
-                          onClick={() => {
-                            /* Handle approve */
-                          }}
-                        >
-                          <Check className='mr-1 h-4 w-4' /> Approve
-                        </Button>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='opacity-0 group-hover:opacity-100 transition-opacity text-red-600'
-                          onClick={() => {
-                            /* Handle deny */
-                          }}
-                        >
-                          <X className='mr-1 h-4 w-4' /> Deny
-                        </Button>
-                      </div>
                     </TableCell>
                   </motion.tr>
                 )
